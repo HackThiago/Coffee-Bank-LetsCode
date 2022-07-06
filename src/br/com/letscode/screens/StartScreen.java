@@ -3,10 +3,13 @@ package br.com.letscode.screens;
 import java.io.IOException;
 
 import br.com.letscode.model.Navigation;
+import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
 import br.com.letscode.util.StringUtil;
 
 public class StartScreen implements ScreenInterface {
+    private static final int LOGO_PRINT_SPEED = 5000;
+
     private static final String COFFEE_BANK_LOGO = "  ______              ______    ______                            _______                       __       "
             + ConsoleUtil.NEW_LINE
             + " /      \\            /      \\  /      \\                          |       \\                     |  \\      "
@@ -36,13 +39,17 @@ public class StartScreen implements ScreenInterface {
     public Navigation run(String[] args) {
         ConsoleUtil.scrollScreen();
 
-        ConsoleUtil.slowPrint(StringUtil.AddBlankSpacesToAllLines(WELCOME_STRING, 18) + ConsoleUtil.NEW_LINE, 5000);
+        ConsoleUtil.slowPrint(StringUtil.addBlankSpacesToAllLines(WELCOME_STRING, 18) + ConsoleUtil.NEW_LINE,
+                LOGO_PRINT_SPEED);
 
         ConsoleUtil.slowPrint(ConsoleUtil.Attribute.FCOL_BLUE.getEscapeCode()
                 + ConsoleUtil.Attribute.BLINK.getEscapeCode() + COFFEE_BANK_LOGO + ConsoleUtil.NEW_LINE
-                + ConsoleUtil.Attribute.RESET.getEscapeCode() + ConsoleUtil.NEW_LINE, 5000);
+                + ConsoleUtil.Attribute.RESET.getEscapeCode() + ConsoleUtil.NEW_LINE, LOGO_PRINT_SPEED);
 
-        ConsoleUtil.slowPrint(StringUtil.BlankSpaces(40) + "Tecle ENTER para continuar");
+        ConsoleUtil.slowPrint(StringUtil.blankSpaces(40) + "Tecle ENTER para continuar");
+        System.out.print(ConsoleUtil.Attribute.FCOL_BLACK.getEscapeCode());
+        ConsolePosition consolePos = ConsoleUtil.getConsoleSize();
+        System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
         try {
             System.in.read();
@@ -50,7 +57,11 @@ public class StartScreen implements ScreenInterface {
             e.printStackTrace();
         }
 
+        args = new String[2];
+        args[0] = String.valueOf(consolePos.getRow());
+        args[1] = String.valueOf(consolePos.getColumn());
+
         ConsoleUtil.clearScreen();
-        return new Navigation(ScreensList.MAIN, null);
+        return new Navigation(ScreensList.MAIN, args);
     }
 }

@@ -4,7 +4,7 @@ import br.com.letscode.model.Navigation;
 
 public class CreateAccountScreen implements ScreenInterface {
     public Navigation run(String[] args) {
-        System.out.println("Client Screen");
+        System.out.println("Create Account Screen");
 
         return new Navigation(ScreensList.EXIT, null);
     }
