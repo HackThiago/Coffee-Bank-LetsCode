@@ -40,40 +40,40 @@ public class ConsoleUtil {
         }
     }
 
-    public static String clearScreen() {
-        return "\033[2J";
+    public static void clearScreen() {
+        System.out.print("\033[2J");
     }
 
-    public static String cursorHome() {
-        return "\033[H";
+    public static void cursorHome() {
+        System.out.print("\033[H");
     }
 
-    public static String cursorTo(int row, int column) {
-        return String.format("\033[%d;%dH", row, column);
+    public static void cursorTo(int row, int column) {
+        System.out.print(String.format("\033[%d;%dH", row, column));
     }
 
-    public static String cursorSave() {
-        return "\033[s";
+    public static void cursorSave() {
+        System.out.print("\033[s");
     }
 
-    public static String cursorRestore() {
-        return "\033[u";
+    public static void cursorRestore() {
+        System.out.print("\033[u");
     }
 
-    public static String scrollScreen() {
-        return "\033[r";
+    public static void scrollScreen() {
+        System.out.print("\033[r");
     }
 
-    public static String scrollSet(int top, int bottom) {
-        return String.format("\033[%d;%dr", top, bottom);
+    public static void scrollSet(int top, int bottom) {
+        System.out.print(String.format("\033[%d;%dr", top, bottom));
     }
 
-    public static String scrollUp() {
-        return "\033D";
+    public static void scrollUp() {
+        System.out.print("\033D");
     }
 
-    public static String scrollDown() {
-        return "\033D";
+    public static void scrollDown() {
+        System.out.print("\033D");
     }
 
     public static void slowPrint(String s) {
