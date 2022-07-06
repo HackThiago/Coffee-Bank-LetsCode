@@ -16,16 +16,16 @@ public class MainScreen implements ScreenInterface {
 
         System.out.print(SystemInterfaceUtil.getHeader("Main Screen", consolePos));
 
-        ConsoleUtil.slowPrint(ConsoleUtil.NEW_LINE
+        System.out.print(ConsoleUtil.NEW_LINE
                 + StringUtil.centralize("########## Digite a opção desejada: ##########", consolePos.getColumn())
                 + ConsoleUtil.NEW_LINE);
         ConsoleUtil.skipLines(3);
-        ConsoleUtil.slowPrint(StringUtil.centralize("1. Criar um cliente", consolePos.getColumn())
+        System.out.print(StringUtil.centralize("1. Criar um cliente", consolePos.getColumn())
                 + ConsoleUtil.NEW_LINE
                 + StringUtil.centralize("2. Ir para a lista de clientes", consolePos.getColumn()) + ConsoleUtil.NEW_LINE
                 + StringUtil.centralize("3. Ir para a lista de contas", consolePos.getColumn()) + ConsoleUtil.NEW_LINE);
         ConsoleUtil.skipLines(3);
-        ConsoleUtil.slowPrint("Digite o número da opção desejada: ");
+        System.out.print("Digite o número da opção desejada: ");
 
         Scanner s = new Scanner(System.in);
         Navigation navigate = new Navigation();
