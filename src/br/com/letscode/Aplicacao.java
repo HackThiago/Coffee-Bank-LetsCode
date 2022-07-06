@@ -1,7 +1,5 @@
 package br.com.letscode;
 
-import java.util.ArrayList;
-
 import br.com.letscode.model.Navigation;
 import br.com.letscode.screens.ExitScreen;
 import br.com.letscode.screens.ScreenInterface;
