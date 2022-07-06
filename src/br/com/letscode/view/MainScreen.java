@@ -28,9 +28,9 @@ public class MainScreen {
 
         ConsoleUtil.slowPrint(StringUtil.AddBlankSpacesToAllLines(WELCOME_STRING, 18) + "\n", 3000);
 
-        ConsoleUtil.slowPrint(ConsoleUtil.setAttribute(ConsoleUtil.AttributeEnum.ATTR_FCOL_BLUE.getValue())
-                + ConsoleUtil.setAttribute(ConsoleUtil.AttributeEnum.ATTR_BLINK.getValue()) + COFFEE_BANK_LOGO + "\n"
-                + ConsoleUtil.setAttribute(ConsoleUtil.AttributeEnum.ATTR_RESET.getValue()) + "\n", 3000);
+        ConsoleUtil.slowPrint(ConsoleUtil.Attribute.FCOL_BLUE.getEscapeCode()
+                + ConsoleUtil.Attribute.BLINK.getEscapeCode() + COFFEE_BANK_LOGO + "\n"
+                + ConsoleUtil.Attribute.RESET.getEscapeCode() + "\n", 3000);
 
         ConsoleUtil.slowPrint(StringUtil.BlankSpaces(40) + "Tecle ENTER para continuar");
 

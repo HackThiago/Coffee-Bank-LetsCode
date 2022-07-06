@@ -10,33 +10,33 @@ public class ConsoleUtil {
 
     public static final String ESC = "\033";
 
-    public enum AttributeEnum {
-        ATTR_RESET(0),
-        ATTR_BRIGHT(1),
-        ATTR_USCORE(4),
-        ATTR_BLINK(5),
-        ATTR_REVERSE(7),
+    public enum Attribute {
+        RESET(0),
+        BRIGHT(1),
+        USCORE(4),
+        BLINK(5),
+        REVERSE(7),
 
-        ATTR_FCOL_BLACK(30),
-        ATTR_FCOL_RED(31),
-        ATTR_FCOL_GREEN(32),
-        ATTR_FCOL_YELLOW(33),
-        ATTR_FCOL_BLUE(34),
+        FCOL_BLACK(30),
+        FCOL_RED(31),
+        FCOL_GREEN(32),
+        FCOL_YELLOW(33),
+        FCOL_BLUE(34),
 
-        ATTR_BCOL_BLACK(40),
-        ATTR_BCOL_RED(41),
-        ATTR_BCOL_GREEN(42),
-        ATTR_BCOL_YELLOW(43),
-        ATTR_BCOL_BLUE(44);
+        BCOL_BLACK(40),
+        BCOL_RED(41),
+        BCOL_GREEN(42),
+        BCOL_YELLOW(43),
+        BCOL_BLUE(44);
 
-        private int value;
+        private String escapeCode;
 
-        private AttributeEnum(int value) {
-            this.value = value;
+        private Attribute(int code) {
+            this.escapeCode = String.format("\033[%dm", code);
         }
 
-        public int getValue() {
-            return this.value;
+        public String getEscapeCode() {
+            return this.escapeCode;
         }
     }
 
@@ -76,18 +76,6 @@ public class ConsoleUtil {
         return "\033D";
     }
 
-    public static String setAttribute(int attr) {
-        return String.format("\033[%dm", attr);
-    }
-
-    public static String setAttributes(int[] attr) {
-        String attributes = "";
-        for (int i = 0; i < attr.length; i++) {
-            attributes = attributes.concat(setAttribute(attr[i]));
-        }
-        return attributes;
-    }
-
     public static void slowPrint(String s) {
         slowPrint(s, DEFAULT_SPEED);
     }
@@ -96,12 +84,13 @@ public class ConsoleUtil {
         for (int i = 0; i < s.length(); i++) {
             System.out.print(s.charAt(i));
 
-            if (bps == 0)
+            if (bps == 0) {
                 continue;
+            }
 
             try {
                 Thread.sleep((int) (8000.0 / bps));
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
