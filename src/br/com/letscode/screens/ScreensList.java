@@ -3,7 +3,7 @@ package br.com.letscode.screens;
 public enum ScreensList {
     START, MAIN, CLIENT, ACCOUNT, CLIENTS_LIST, ACCOUNTS_LIST, CREATE_CLIENT, CREATE_ACCOUNT, EXIT;
 
-    public ScreenInterface getInstance() {
+    public ScreenInterface createInstance() {
         ScreenInterface screenInstance;
         switch (this) {
             case START:
