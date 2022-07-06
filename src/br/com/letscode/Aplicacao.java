@@ -9,10 +9,12 @@ import br.com.letscode.util.ConsoleUtil;
 public class Aplicacao {
     public static void main(String[] args) throws Exception {
         ConsoleUtil.clearScreen();
+
         Navigation navigate = new Navigation(ScreensList.START, null);
         ScreenInterface screen;
+
         while (navigate.getScreen() != ScreensList.EXIT) {
-            screen = navigate.getScreen().getInstance();
+            screen = navigate.getScreen().createInstance();
             navigate = screen.run(navigate.getArgs());
         }
         screen = new ExitScreen();
