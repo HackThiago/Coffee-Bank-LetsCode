@@ -12,7 +12,7 @@ public class StringUtil {
     public static String AddBlankSpacesToAllLines(String s, int quantity) {
         String spaces = BlankSpaces(quantity);
         s = spaces.concat(s);
-        s = s.replaceAll("\n", "\n" + spaces);
+        s = s.replaceAll("\n", ConsoleUtil.NEW_LINE + spaces);
         return s;
     }
 }

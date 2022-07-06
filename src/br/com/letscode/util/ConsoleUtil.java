@@ -9,6 +9,7 @@ public class ConsoleUtil {
     static final int DEFAULT_SPEED = 600;
 
     public static final String ESC = "\033";
+    public static final String NEW_LINE = String.format("%n");
 
     public enum Attribute {
         RESET(0),
