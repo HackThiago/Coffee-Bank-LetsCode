@@ -5,8 +5,14 @@
 
 package br.com.letscode.util;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ConsoleUtil {
-    static final int DEFAULT_SPEED = 600;
+    static final int DEFAULT_SPEED = 1200;
 
     public static final String ESC = "\033";
     public static final String NEW_LINE = String.format("%n");
@@ -53,6 +59,10 @@ public class ConsoleUtil {
         System.out.print(String.format("\033[%d;%dH", row, column));
     }
 
+    public static void cursorTo(ConsolePosition pos) {
+        cursorTo(pos.getRow(), pos.getColumn());
+    }
+
     public static void cursorSave() {
         System.out.print("\033[s");
     }
@@ -61,8 +71,55 @@ public class ConsoleUtil {
         System.out.print("\033[u");
     }
 
+    public static void cursorRequest() {
+        System.out.print("\u001b[6n");
+    }
+
     public static void scrollScreen() {
         System.out.print("\033[r");
+    }
+
+    public static void skipLines(int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            System.out.print(" " + NEW_LINE);
+        }
+    }
+
+    public static ConsolePosition getConsoleSize() {
+        cursorSave();
+        cursorTo(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        cursorRequest();
+        cursorRestore();
+
+        ConsolePosition pos = new ConsolePosition();
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            byte[] buff = new byte[1];
+            while (System.in.read(buff, 0, 1) != -1) {
+                sb.append((char) buff[0]);
+                if (buff[0] == 'R') {
+                    break;
+                }
+            }
+
+            Matcher m = Pattern.compile("\\d+").matcher(sb.toString());
+            List<String> regexMatches = new ArrayList<String>();
+
+            for (int i = 0; i < 2; i++) {
+                if (!m.find()) {
+                    throw new IOException("Error when trying to get console size");
+                }
+                regexMatches.add(m.group());
+            }
+
+            pos.setRow(Integer.parseInt(regexMatches.get(0)));
+            pos.setColumn(Integer.parseInt(regexMatches.get(1)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pos;
     }
 
     public static void scrollSet(int top, int bottom) {
