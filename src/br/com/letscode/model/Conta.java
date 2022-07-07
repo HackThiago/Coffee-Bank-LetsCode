@@ -7,11 +7,13 @@ public abstract class Conta {
     protected static int qtdContas = 0;
 
     protected int codigoConta;
+    protected TipoClienteEnum tipoCliente;
     protected BigDecimal saldo;
 
-    public Conta() {
+    public Conta(TipoClienteEnum tipoCliente) {
         codigoConta = ++qtdContas;
         saldo = new BigDecimal(0).setScale(3, RoundingMode.FLOOR);
+        this.tipoCliente = tipoCliente;
     }
 
     
@@ -28,5 +30,11 @@ public abstract class Conta {
 
     }
 
+    public void depositar(BigDecimal quantia){
+        this.saldo.add(quantia);
+    };
 
+    public void transferir(Conta destinatario, BigDecimal quantia){
+        // TODO
+    };
 }

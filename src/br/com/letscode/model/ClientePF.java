@@ -21,13 +21,13 @@ public class ClientePF extends Cliente {
         
         switch (tipo) {
             case CORRENTE:
-                conta = new ContaCorrente();
+                conta = new ContaCorrente(TipoClienteEnum.PESSOA_FISICA);
                 break;
             case POUPANCA:
-                conta = new ContaPoupanca();
+                conta = new ContaPoupanca(TipoClienteEnum.PESSOA_FISICA);
                 break;
             case INVESTIMENTO:
-                conta = new ContaInvestimento();
+                conta = new ContaInvestimento(TipoClienteEnum.PESSOA_FISICA);
                 break;
             default:
                 // TODO throws error - invalid type 
