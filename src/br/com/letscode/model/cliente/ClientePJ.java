@@ -1,4 +1,9 @@
-package br.com.letscode.model;
+package br.com.letscode.model.cliente;
+
+import br.com.letscode.model.conta.Conta;
+import br.com.letscode.model.conta.ContaCorrente;
+import br.com.letscode.model.conta.ContaInvestimento;
+import br.com.letscode.model.conta.TipoContaEnum;
 
 public class ClientePJ extends Cliente {
     int cnpj;

@@ -1,7 +1,9 @@
-package br.com.letscode.model;
+package br.com.letscode.model.conta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import br.com.letscode.model.cliente.TipoClienteEnum;
 
 public abstract class Conta {
     protected static int qtdContas = 0;
@@ -16,6 +18,9 @@ public abstract class Conta {
         this.tipoCliente = tipoCliente;
     }
 
+    public int getCodigoConta(){
+        return this.codigoConta;
+    }
     
     public BigDecimal consultarSaldo() {
         return this.saldo;

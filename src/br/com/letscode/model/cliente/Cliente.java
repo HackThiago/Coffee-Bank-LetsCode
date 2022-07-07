@@ -1,6 +1,9 @@
-package br.com.letscode.model;
+package br.com.letscode.model.cliente;
 
 import java.util.ArrayList;
+
+import br.com.letscode.model.conta.Conta;
+import br.com.letscode.model.conta.TipoContaEnum;
 
 public abstract class Cliente {
     private String nome;
@@ -15,7 +18,7 @@ public abstract class Cliente {
     }
     
     public Conta getConta(int codigoConta) {
-        return contas.stream().filter(conta -> conta.codigoConta == codigoConta).findFirst().orElse(null);
+        return contas.stream().filter(conta -> conta.getCodigoConta() == codigoConta).findFirst().orElse(null);
     }
     public ArrayList<Conta> getContas() {
         return contas;

@@ -1,7 +1,8 @@
 package br.com.letscode.database;
 
 import java.util.ArrayList;
-import br.com.letscode.model.Cliente;
+
+import br.com.letscode.model.cliente.Cliente;
 
 public class ClienteDAO {
     // Mock a database acces
