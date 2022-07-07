@@ -16,8 +16,28 @@ public class ClientePF extends Cliente {
 
     @Override
     public Conta abrirConta(TipoContaEnum tipo) {
-        // TODO Auto-generated method stub
-        return null;
+        
+        Conta conta = null;
+        
+        switch (tipo) {
+            case CORRENTE:
+                conta = new ContaCorrente();
+                break;
+            case POUPANCA:
+                conta = new ContaPoupanca();
+                break;
+            case INVESTIMENTO:
+                conta = new ContaInvestimento();
+                break;
+            default:
+                // TODO throws error - invalid type 
+                break;
+        }
+
+        // add conta to arraylist of contas
+        this.addConta(conta);
+
+        return conta;
     }
 
 

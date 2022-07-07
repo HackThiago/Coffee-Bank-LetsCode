@@ -21,6 +21,10 @@ public abstract class Cliente {
         return contas;
     }
 
+    protected void addConta(Conta conta){
+        this.contas.add(conta);
+    }
+
     public abstract Conta abrirConta(TipoContaEnum tipo);
 
 }
