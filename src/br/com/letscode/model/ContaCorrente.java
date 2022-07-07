@@ -3,14 +3,11 @@ package br.com.letscode.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class ContaCorrente implements ContaPFInterface {
-    private static int qtdContas = 0;
+public class ContaCorrente extends Conta implements ContaPFInterface {
 
-    private int codigoConta;
-    private BigDecimal saldo;
 
     public ContaCorrente() {
-        codigoConta = qtdContas++;
+        codigoConta = ++qtdContas;
         saldo = new BigDecimal(0).setScale(3, RoundingMode.FLOOR);
     }
 
