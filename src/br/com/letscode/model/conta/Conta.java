@@ -58,4 +58,9 @@ public abstract class Conta {
 
         this.cobraTaxaParaPJ();
     };
+
+    public void efetuaRendimento(){
+        // TODO - método que será executado todo dia, a meia noite, para
+        //   efetuar o rendimento em todas as contas
+    }
 }
