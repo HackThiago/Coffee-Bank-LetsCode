@@ -48,7 +48,7 @@ public class ConsoleUtil {
     }
 
     public static void clearScreen() {
-        System.out.print("\033[2J");
+        System.out.print(Attribute.RESET.getEscapeCode() + "\033[2J");
     }
 
     public static void cursorHome() {

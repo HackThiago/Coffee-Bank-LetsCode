@@ -1,7 +1,10 @@
 package br.com.letscode.screens;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import br.com.letscode.error.ExitSignalException;
+import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.model.Message;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.util.ConsolePosition;
@@ -36,13 +39,21 @@ public class MainScreen implements ScreenInterface {
         while (true) {
             ConsoleUtil.clearScreen();
             draw(consoleSize, message);
-            SystemInterfaceUtil.drawInputPrompt(consoleSize, "Digite o número da opção desejada: ");
             int userInput = 0;
             try {
-                userInput = Integer.parseInt(scanner.nextLine());
+                userInput = Integer.parseInt(
+                        SystemInterfaceUtil.getUserInput(scanner, consoleSize, "Digite o número da opção desejada: "));
             } catch (NumberFormatException e) {
                 message.setText("Opção inválida!");
                 continue;
+            } catch (ExitSignalException e) {
+                ConsoleUtil.clearScreen();
+                return new Navigation(ScreensList.EXIT, args);
+            } catch (GoBackSignalException e) {
+                ConsoleUtil.clearScreen();
+                return new Navigation(ScreensList.START, args);
+            } catch (NoSuchElementException e) {
+                // do nothing
             }
 
             System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());

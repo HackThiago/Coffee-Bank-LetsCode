@@ -1,54 +1,45 @@
 package br.com.letscode.screens;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import br.com.letscode.model.Navigation;
 import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
 import br.com.letscode.util.StringUtil;
+import br.com.letscode.util.SystemInterfaceUtil;
 
 public class StartScreen implements ScreenInterface {
-    private static final String COFFEE_BANK_LOGO = "  ______              ______    ______                            _______                       __       "
-            + ConsoleUtil.NEW_LINE
-            + " /      \\            /      \\  /      \\                          |       \\                     |  \\      "
-            + ConsoleUtil.NEW_LINE
-            + "|  $$$$$$\\  ______  |  $$$$$$\\|  $$$$$$\\ ______    ______        | $$$$$$$\\  ______   _______  | $$   __ "
-            + ConsoleUtil.NEW_LINE
-            + "| $$   \\$$ /      \\ | $$_  \\$$| $$_  \\$$/      \\  /      \\       | $$__/ $$ |      \\ |       \\ | $$  /  \\"
-            + ConsoleUtil.NEW_LINE
-            + "| $$      |  $$$$$$\\| $$ \\    | $$ \\   |  $$$$$$\\|  $$$$$$\\      | $$    $$  \\$$$$$$\\| $$$$$$$\\| $$_/  $$"
-            + ConsoleUtil.NEW_LINE
-            + "| $$   __ | $$  | $$| $$$$    | $$$$   | $$    $$| $$    $$      | $$$$$$$\\ /      $$| $$  | $$| $$   $$ "
-            + ConsoleUtil.NEW_LINE
-            + "| $$__/  \\| $$__/ $$| $$      | $$     | $$$$$$$$| $$$$$$$$      | $$__/ $$|  $$$$$$$| $$  | $$| $$$$$$\\ "
-            + ConsoleUtil.NEW_LINE
-            + " \\$$    $$ \\$$    $$| $$      | $$      \\$$     \\ \\$$     \\      | $$    $$ \\$$    $$| $$  | $$| $$  \\$$\\"
-            + ConsoleUtil.NEW_LINE
-            + "  \\$$$$$$   \\$$$$$$  \\$$       \\$$       \\$$$$$$$  \\$$$$$$$       \\$$$$$$$   \\$$$$$$$ \\$$   \\$$ \\$$   \\$$"
-            + ConsoleUtil.NEW_LINE;
-
-    private static final String WELCOME_STRING = " ____                            _           _                     "
-            + ConsoleUtil.NEW_LINE
-            + "| __ )  ___ _ __ ___      __   _(_)_ __   __| | ___     __ _  ___  " + ConsoleUtil.NEW_LINE
-            + "|  _ \\ / _ \\ '_ ` _ \\ ____\\ \\ / / | '_ \\ / _` |/ _ \\   / _` |/ _ \\ " + ConsoleUtil.NEW_LINE
-            + "| |_) |  __/ | | | | |_____\\ V /| | | | | (_| | (_) | | (_| | (_) |" + ConsoleUtil.NEW_LINE
-            + "|____/ \\___|_| |_| |_|      \\_/ |_|_| |_|\\__,_|\\___/   \\__,_|\\___/ " + ConsoleUtil.NEW_LINE;
-
     public Navigation run(Scanner scanner, String[] args) {
         ConsoleUtil.scrollScreen();
 
-        System.out.print(StringUtil.addBlankSpacesToAllLines(WELCOME_STRING, 18) + ConsoleUtil.NEW_LINE);
+        System.out.print(
+                StringUtil.addBlankSpacesToAllLines(SystemInterfaceUtil.WELCOME_STRING, 18) + ConsoleUtil.NEW_LINE);
 
         System.out.print(ConsoleUtil.Attribute.FCOL_BLUE.getEscapeCode()
-                + ConsoleUtil.Attribute.BLINK.getEscapeCode() + COFFEE_BANK_LOGO + ConsoleUtil.NEW_LINE
+                + ConsoleUtil.Attribute.BLINK.getEscapeCode()
+                + SystemInterfaceUtil.COFFEE_BANK_LOGO
+                + ConsoleUtil.NEW_LINE
                 + ConsoleUtil.Attribute.RESET.getEscapeCode() + ConsoleUtil.NEW_LINE);
 
-        System.out.print(StringUtil.blankSpaces(40) + "Tecle ENTER para continuar");
+        System.out.print(StringUtil.centralize("Tecle ENTER para continuar", SystemInterfaceUtil.DEFAULT_CONSOLE_WIDTH)
+                + ConsoleUtil.NEW_LINE
+                + StringUtil.centralize("Digite \"\\back\" nas telas para retornar a tela anterior",
+                        SystemInterfaceUtil.DEFAULT_CONSOLE_WIDTH)
+                + ConsoleUtil.NEW_LINE
+                + StringUtil.centralize("Digite \"\\exit\" nas telas para encerrar o programa",
+                        SystemInterfaceUtil.DEFAULT_CONSOLE_WIDTH));
+
         System.out.print(ConsoleUtil.Attribute.FCOL_BLACK.getEscapeCode());
         ConsolePosition consolePos = ConsoleUtil.getConsoleSize();
         System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
-        scanner.nextLine();
+        try {
+            scanner.nextLine();
+        } catch (NoSuchElementException e) {
+            ConsoleUtil.clearScreen();
+            return new Navigation(ScreensList.EXIT, args);
+        }
 
         args = new String[2];
         args[0] = String.valueOf(consolePos.getRow());

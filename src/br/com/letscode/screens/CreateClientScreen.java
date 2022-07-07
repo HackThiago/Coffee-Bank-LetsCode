@@ -1,7 +1,10 @@
 package br.com.letscode.screens;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import br.com.letscode.error.ExitSignalException;
+import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.model.Message;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.util.ConsolePosition;
@@ -87,9 +90,18 @@ public class CreateClientScreen implements ScreenInterface {
                     promptMessage = "";
                     break;
             }
-            SystemInterfaceUtil.drawInputPrompt(consoleSize, promptMessage);
             String userInput = "";
-            userInput = scanner.nextLine().strip();
+            try {
+                userInput = SystemInterfaceUtil.getUserInput(scanner, consoleSize, promptMessage).strip();
+            } catch (ExitSignalException e) {
+                ConsoleUtil.clearScreen();
+                return new Navigation(ScreensList.EXIT, args);
+            } catch (GoBackSignalException e) {
+                ConsoleUtil.clearScreen();
+                return new Navigation(ScreensList.MAIN, args);
+            } catch (NoSuchElementException e) {
+                // do nothing
+            }
             System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
             if (!validateAnswer(formStep, userInput)) {
@@ -127,8 +139,6 @@ public class CreateClientScreen implements ScreenInterface {
             }
             break;
         }
-
-        System.out.println(tipoCliente + " - " + idCliente + " - " + nomeCliente);
 
         ConsoleUtil.clearScreen();
         navigate.setScreen(ScreensList.CLIENT);

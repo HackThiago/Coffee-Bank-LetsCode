@@ -1,8 +1,40 @@
 package br.com.letscode.util;
 
+import java.util.Scanner;
+
+import br.com.letscode.error.ExitSignalException;
+import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.model.Message;
 
 public class SystemInterfaceUtil {
+    public static final int DEFAULT_CONSOLE_WIDTH = 108;
+
+    public static final String COFFEE_BANK_LOGO = "  ______              ______    ______                            _______                       __       "
+            + ConsoleUtil.NEW_LINE
+            + " /      \\            /      \\  /      \\                          |       \\                     |  \\      "
+            + ConsoleUtil.NEW_LINE
+            + "|  $$$$$$\\  ______  |  $$$$$$\\|  $$$$$$\\ ______    ______        | $$$$$$$\\  ______   _______  | $$   __ "
+            + ConsoleUtil.NEW_LINE
+            + "| $$   \\$$ /      \\ | $$_  \\$$| $$_  \\$$/      \\  /      \\       | $$__/ $$ |      \\ |       \\ | $$  /  \\"
+            + ConsoleUtil.NEW_LINE
+            + "| $$      |  $$$$$$\\| $$ \\    | $$ \\   |  $$$$$$\\|  $$$$$$\\      | $$    $$  \\$$$$$$\\| $$$$$$$\\| $$_/  $$"
+            + ConsoleUtil.NEW_LINE
+            + "| $$   __ | $$  | $$| $$$$    | $$$$   | $$    $$| $$    $$      | $$$$$$$\\ /      $$| $$  | $$| $$   $$ "
+            + ConsoleUtil.NEW_LINE
+            + "| $$__/  \\| $$__/ $$| $$      | $$     | $$$$$$$$| $$$$$$$$      | $$__/ $$|  $$$$$$$| $$  | $$| $$$$$$\\ "
+            + ConsoleUtil.NEW_LINE
+            + " \\$$    $$ \\$$    $$| $$      | $$      \\$$     \\ \\$$     \\      | $$    $$ \\$$    $$| $$  | $$| $$  \\$$\\"
+            + ConsoleUtil.NEW_LINE
+            + "  \\$$$$$$   \\$$$$$$  \\$$       \\$$       \\$$$$$$$  \\$$$$$$$       \\$$$$$$$   \\$$$$$$$ \\$$   \\$$ \\$$   \\$$"
+            + ConsoleUtil.NEW_LINE;
+
+    public static final String WELCOME_STRING = " ____                            _           _                     "
+            + ConsoleUtil.NEW_LINE
+            + "| __ )  ___ _ __ ___      __   _(_)_ __   __| | ___     __ _  ___  " + ConsoleUtil.NEW_LINE
+            + "|  _ \\ / _ \\ '_ ` _ \\ ____\\ \\ / / | '_ \\ / _` |/ _ \\   / _` |/ _ \\ " + ConsoleUtil.NEW_LINE
+            + "| |_) |  __/ | | | | |_____\\ V /| | | | | (_| | (_) | | (_| | (_) |" + ConsoleUtil.NEW_LINE
+            + "|____/ \\___|_| |_| |_|      \\_/ |_|_| |_|\\__,_|\\___/   \\__,_|\\___/ " + ConsoleUtil.NEW_LINE;
+
     public static String getHeader(String screenName, ConsolePosition pos) {
         final String HEADER_START_TEXT = "Coffee Bank";
         final String time = TimeUtil.now();
@@ -71,11 +103,23 @@ public class SystemInterfaceUtil {
         ConsoleUtil.skipLines(3);
     }
 
-    public static void drawInputPrompt(ConsolePosition consoleSize, String message) {
+    public static String getUserInput(Scanner scanner, ConsolePosition consoleSize, String message)
+            throws ExitSignalException, GoBackSignalException {
         ConsoleUtil.cursorTo(consoleSize.getRow(), 1);
         System.out.print(ConsoleUtil.Attribute.REVERSE.getEscapeCode()
                 + message
                 + StringUtil.blankSpaces(consoleSize.getColumn() - message.length()));
         ConsoleUtil.cursorTo(consoleSize.getRow(), message.length() + 1);
+
+        String userInput = scanner.nextLine();
+
+        if (userInput.strip().toUpperCase().equals("\\EXIT")) {
+            throw new ExitSignalException("The user has sent the exit signal");
+        }
+        if (userInput.strip().toUpperCase().equals("\\BACK")) {
+            throw new GoBackSignalException("The user has sent the go back signal");
+        }
+
+        return userInput;
     }
 }
