@@ -40,6 +40,12 @@ public abstract class Conta {
     };
 
     public void transferir(Conta destinatario, BigDecimal quantia){
-        // TODO
+        final int LESS_THAN = -1;
+        if(this.consultarSaldo().compareTo(quantia) == LESS_THAN){
+            throw new Error("Saldo insuficiente");
+        }
+        
+        saldo = saldo.subtract(quantia);
+        destinatario.saldo.add(quantia);
     };
 }
