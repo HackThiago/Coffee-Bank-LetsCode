@@ -26,10 +26,10 @@ public class ClientePJ extends Cliente {
         
         switch (tipo) {
             case CORRENTE:
-                conta = new ContaCorrente(TipoClienteEnum.PESSOA_JURIDICA);
+                conta = new ContaCorrente(this);
                 break;
             case INVESTIMENTO:
-                conta = new ContaInvestimento(TipoClienteEnum.PESSOA_JURIDICA);
+                conta = new ContaInvestimento(this);
                 break;
             case POUPANCA:
                 throw new Error("Pessoa jurídica não pode abrir conta poupança");

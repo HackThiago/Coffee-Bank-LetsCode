@@ -1,11 +1,11 @@
 package br.com.letscode.model.conta;
 
-import br.com.letscode.model.cliente.TipoClienteEnum;
+import br.com.letscode.model.cliente.Cliente;
 
 public class ContaPoupanca extends Conta {
 
-    public ContaPoupanca(TipoClienteEnum tipoClient) {
-        super(tipoClient);
+    public ContaPoupanca(Cliente cliente) {
+        super(cliente);
     }
 
 }

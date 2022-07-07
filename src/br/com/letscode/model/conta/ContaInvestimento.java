@@ -4,12 +4,11 @@ import java.math.BigDecimal;
 
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
-import br.com.letscode.model.cliente.TipoClienteEnum;
 
 public class ContaInvestimento extends Conta {
 
-    public ContaInvestimento(TipoClienteEnum tipoCliente) {
-        super(tipoCliente);
+    public ContaInvestimento(Cliente cliente) {
+        super(cliente);
     }
 
     public void investir(BigDecimal quantia, Cliente cliente) {

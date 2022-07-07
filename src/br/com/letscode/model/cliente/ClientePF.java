@@ -27,13 +27,13 @@ public class ClientePF extends Cliente {
         
         switch (tipo) {
             case CORRENTE:
-                conta = new ContaCorrente(TipoClienteEnum.PESSOA_FISICA);
+                conta = new ContaCorrente(this);
                 break;
             case POUPANCA:
-                conta = new ContaPoupanca(TipoClienteEnum.PESSOA_FISICA);
+                conta = new ContaPoupanca(this);
                 break;
             case INVESTIMENTO:
-                conta = new ContaInvestimento(TipoClienteEnum.PESSOA_FISICA);
+                conta = new ContaInvestimento(this);
                 break;
             default:
                 throw new Error("Tipo de conta inválido");

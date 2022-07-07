@@ -2,20 +2,23 @@ package br.com.letscode.model.conta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.ClientInfoStatus;
 
+import br.com.letscode.model.cliente.Cliente;
+import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.TipoClienteEnum;
 
 public abstract class Conta {
     protected static int qtdContas = 0;
 
     protected int codigoConta;
-    protected TipoClienteEnum tipoCliente;
+    protected Cliente cliente;
     protected BigDecimal saldo;
 
-    public Conta(TipoClienteEnum tipoCliente) {
+    public Conta(Cliente cliente) {
         codigoConta = ++qtdContas;
         saldo = new BigDecimal(0).setScale(3, RoundingMode.FLOOR);
-        this.tipoCliente = tipoCliente;
+        this.cliente = cliente;
     }
 
     public int getCodigoConta(){
@@ -28,7 +31,7 @@ public abstract class Conta {
 
     private void cobraTaxaParaPJ(){
         // cobra 0.5% por cada saque e transf para PFs
-        if(tipoCliente == TipoClienteEnum.PESSOA_JURIDICA){
+        if(cliente instanceof ClientePF){
             saldo = saldo.multiply(BigDecimal.valueOf(0.995));
         }
     }
