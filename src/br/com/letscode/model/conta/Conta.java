@@ -6,6 +6,27 @@ import java.math.RoundingMode;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 
+
+/** TODO - add regras de taxas e rendimentos -- nova modelagem
+ * Os clientes podem ser pessoa física ou jurídica,
+ * sendo que para PJ existe a cobrança de uma taxa de 0.5%
+ * para cada saque ou transferência (mudar isso na modelagem).
+ * 
+ * Além do produto conta-corrente,
+ * os clientes PF podem abrir uma conta-poupança e conta-investimento.
+ * 
+ * Clientes PJ não abrem poupança,
+ * mas seus rendimentos em conta-investimento rendem 2% a mais que a PF.
+ * 
+ * Conta-poupanca rende 0.5%
+ * Conta-investimento PF rende 1%
+ * Para fins didaticos,
+ * o rendimento pode ser calculado quando ha investimento
+ * 
+ * Qualquer outro tipo de calculo de investimento sera valido para este exercicio.
+ * (virada do dia, por exemplo)
+ * */
+
 public abstract class Conta {
     protected static int qtdContas = 0;
 
