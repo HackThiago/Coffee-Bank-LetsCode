@@ -30,7 +30,7 @@ public class ContaCorrente extends Conta implements ContaPFInterface {
     }
 
     @Override
-    public void transferir(ContaInterface destinatario, BigDecimal quantia) {
+    public void transferir(Conta destinatario, BigDecimal quantia) {
         // TODO Auto-generated method stub
 
     }

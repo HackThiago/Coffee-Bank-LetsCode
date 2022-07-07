@@ -5,24 +5,19 @@ public abstract class Cliente {
     private Conta[] contas;
 
 
-
     public String getNome() {
         return nome;
+    } 
+    public void setNome(String nome) {
+        this.nome = nome;
     }
+    
     public Conta getConta(int id) {
         return contas[id];
     }
     public Conta[] getContas() {
         return contas;
     }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public void setContas(Conta[] contas) {
-        this.contas = contas;
-    }
-
 
     public abstract Conta abrirConta(TipoContaEnum tipo);
 

@@ -21,8 +21,9 @@ public class ContaInvestimento extends Conta {
         // TODO Auto-generated method stub
     }
 
-    public void investir(BigDecimal quantia) {
-        // TODO Auto-generated method stub
+    public void investir(BigDecimal quantia, Cliente cliente) {
+        if (cliente instanceof ClientePF){
+            saldo.add(quantia.multiply((BigDecimal.valueOf(0.01))));
+        }
     }
-
 }
