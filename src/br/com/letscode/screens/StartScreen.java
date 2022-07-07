@@ -1,6 +1,6 @@
 package br.com.letscode.screens;
 
-import java.io.IOException;
+import java.util.Scanner;
 
 import br.com.letscode.model.Navigation;
 import br.com.letscode.util.ConsolePosition;
@@ -34,7 +34,7 @@ public class StartScreen implements ScreenInterface {
             + "| |_) |  __/ | | | | |_____\\ V /| | | | | (_| | (_) | | (_| | (_) |" + ConsoleUtil.NEW_LINE
             + "|____/ \\___|_| |_| |_|      \\_/ |_|_| |_|\\__,_|\\___/   \\__,_|\\___/ " + ConsoleUtil.NEW_LINE;
 
-    public Navigation run(String[] args) {
+    public Navigation run(Scanner scanner, String[] args) {
         ConsoleUtil.scrollScreen();
 
         System.out.print(StringUtil.addBlankSpacesToAllLines(WELCOME_STRING, 18) + ConsoleUtil.NEW_LINE);
@@ -48,11 +48,7 @@ public class StartScreen implements ScreenInterface {
         ConsolePosition consolePos = ConsoleUtil.getConsoleSize();
         System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        scanner.nextLine();
 
         args = new String[2];
         args[0] = String.valueOf(consolePos.getRow());

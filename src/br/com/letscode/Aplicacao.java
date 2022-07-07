@@ -1,5 +1,7 @@
 package br.com.letscode;
 
+import java.util.Scanner;
+
 import br.com.letscode.model.Navigation;
 import br.com.letscode.screens.ExitScreen;
 import br.com.letscode.screens.ScreenInterface;
@@ -12,12 +14,13 @@ public class Aplicacao {
 
         Navigation navigate = new Navigation(ScreensList.START, null);
         ScreenInterface screen;
-
+        Scanner scanner = new Scanner(System.in);
         while (navigate.getScreen() != ScreensList.EXIT) {
             screen = navigate.getScreen().createInstance();
-            navigate = screen.run(navigate.getArgs());
+            navigate = screen.run(scanner, navigate.getArgs());
         }
+        scanner.close();
         screen = new ExitScreen();
-        screen.run(navigate.getArgs());
+        screen.run(scanner, navigate.getArgs());
     }
 }

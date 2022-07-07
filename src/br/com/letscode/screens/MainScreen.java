@@ -1,6 +1,5 @@
 package br.com.letscode.screens;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import br.com.letscode.model.Message;
@@ -29,27 +28,28 @@ public class MainScreen implements ScreenInterface {
         SystemInterfaceUtil.drawInfoScreen(SCREEN_NAME, message, SCREEN_CONTENT, consoleSize);
     }
 
-    public Navigation run(String[] args) {
+    public Navigation run(Scanner scanner, String[] args) {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-        Message message = new Message("", MessageType.INFO);
+        Message message = new Message("", MessageType.ERROR);
         Navigation navigate = new Navigation();
 
-        Scanner s = new Scanner(System.in);
         while (true) {
             ConsoleUtil.clearScreen();
             draw(consoleSize, message);
             SystemInterfaceUtil.drawInputPrompt(consoleSize, "Digite o número da opção desejada: ");
             int userInput = 0;
             try {
-                userInput = s.nextInt();
-            } catch (InputMismatchException e) {
-                s.nextLine();
+                userInput = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                message.setText("Opção inválida!");
+                continue;
             }
+
             System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
             switch (userInput) {
                 case 1:
-                    navigate.setScreen(ScreensList.CREATE_ACCOUNT);
+                    navigate.setScreen(ScreensList.CREATE_CLIENT);
                     break;
                 case 2:
                     navigate.setScreen(ScreensList.CLIENTS_LIST);
@@ -63,7 +63,6 @@ public class MainScreen implements ScreenInterface {
             }
             break;
         }
-        s.close();
 
         ConsoleUtil.clearScreen();
         navigate.setArgs(args);
