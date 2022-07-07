@@ -36,8 +36,7 @@ public class ClientePF extends Cliente {
                 conta = new ContaInvestimento(TipoClienteEnum.PESSOA_FISICA);
                 break;
             default:
-                // TODO throws error - invalid type 
-                break;
+                throw new Error("Tipo de conta inválido");
         }
 
         // add conta to arraylist of contas

@@ -32,11 +32,9 @@ public class ClientePJ extends Cliente {
                 conta = new ContaInvestimento(TipoClienteEnum.PESSOA_JURIDICA);
                 break;
             case POUPANCA:
-                // TODO throws error - PJ cannot open this type of account
-                break;
+                throw new Error("Pessoa jurídica não pode abrir conta poupança");
             default:
-                // TODO throws error - invalid type 
-                break;
+                throw new Error("Tipo de conta inválido");
         }
 
         // add conta to arraylist of contas
