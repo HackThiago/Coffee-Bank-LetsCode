@@ -1,5 +1,7 @@
 package br.com.letscode.util;
 
+import br.com.letscode.model.Message;
+
 public class SystemInterfaceUtil {
     public static String getHeader(String screenName, ConsolePosition pos) {
         final String HEADER_START_TEXT = "Coffee Bank";
@@ -20,11 +22,11 @@ public class SystemInterfaceUtil {
                 + ConsoleUtil.NEW_LINE;
     }
 
-    public static String getMessage(String message, MessageType type, int consoleWidth) {
+    public static String getMessage(Message message, int consoleWidth) {
         String format = ConsoleUtil.Attribute.BRIGHT.getEscapeCode();
 
         String formatBGColor;
-        switch (type) {
+        switch (message.getType()) {
             case SUCCESS:
                 formatBGColor = ConsoleUtil.Attribute.FCOL_GREEN.getEscapeCode();
                 break;
@@ -45,9 +47,35 @@ public class SystemInterfaceUtil {
 
         return format
                 + ConsoleUtil.Attribute.REVERSE.getEscapeCode()
-                + StringUtil.centralize(message, consoleWidth)
-                + StringUtil.blankSpaces((consoleWidth / 2) - (message.length() / 2))
+                + StringUtil.centralize(message.getText(), consoleWidth)
+                + StringUtil.blankSpaces((consoleWidth / 2) - (message.getText().length() / 2))
                 + ConsoleUtil.Attribute.RESET.getEscapeCode()
                 + ConsoleUtil.NEW_LINE;
+    }
+
+    public static void drawInfoScreen(String screenName, Message message, String content, ConsolePosition consoleSize) {
+        ConsoleUtil.scrollScreen();
+
+        System.out.print(SystemInterfaceUtil.getHeader(screenName, consoleSize));
+
+        ConsoleUtil.skipLines(1);
+        if (message.getText().length() > 0) {
+            System.out.print(getMessage(message, consoleSize.getColumn()));
+        } else {
+            ConsoleUtil.skipLines(1);
+        }
+
+        ConsoleUtil.skipLines(1);
+
+        System.out.print(content + ConsoleUtil.NEW_LINE);
+        ConsoleUtil.skipLines(3);
+    }
+
+    public static void drawInputPrompt(ConsolePosition consoleSize, String message) {
+        ConsoleUtil.cursorTo(consoleSize.getRow(), 1);
+        System.out.print(ConsoleUtil.Attribute.REVERSE.getEscapeCode()
+                + message
+                + StringUtil.blankSpaces(consoleSize.getColumn() - message.length()));
+        ConsoleUtil.cursorTo(consoleSize.getRow(), message.length() + 1);
     }
 }

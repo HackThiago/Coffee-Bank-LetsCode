@@ -1,7 +1,9 @@
 package br.com.letscode.screens;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import br.com.letscode.model.Message;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
@@ -10,50 +12,41 @@ import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
 public class MainScreen implements ScreenInterface {
-    private static void draw(ConsolePosition consoleSize, String message) {
-        ConsoleUtil.scrollScreen();
+    private static void draw(ConsolePosition consoleSize, Message message) {
+        final String SCREEN_NAME = "Home";
+        final String SCREEN_CONTENT = StringUtil.centralize("########## Digite a opção desejada: ##########",
+                consoleSize.getColumn())
+                + StringUtil.multiply(ConsoleUtil.NEW_LINE, 4)
+                + StringUtil.centralizeBlock("1. Criar um cliente"
+                        + ConsoleUtil.NEW_LINE
+                        + "2. Ir para a lista de clientes"
+                        + ConsoleUtil.NEW_LINE
+                        + "3. Ir para a lista de contas"
+                        + ConsoleUtil.NEW_LINE,
+                        consoleSize.getColumn())
+                + ConsoleUtil.NEW_LINE;
 
-        System.out.print(SystemInterfaceUtil.getHeader("Main Screen", consoleSize));
-
-        ConsoleUtil.skipLines(1);
-        if (message.length() > 0) {
-            System.out.print(SystemInterfaceUtil.getMessage(message, MessageType.INFO, consoleSize.getColumn()));
-        } else {
-            ConsoleUtil.skipLines(1);
-        }
-
-        ConsoleUtil.skipLines(1);
-
-        System.out
-                .print(StringUtil.centralize("########## Digite a opção desejada: ##########", consoleSize.getColumn())
-                        + ConsoleUtil.NEW_LINE);
-        ConsoleUtil.skipLines(3);
-        System.out.print(StringUtil.centralize("1. Criar um cliente", consoleSize.getColumn())
-                + ConsoleUtil.NEW_LINE
-                + StringUtil.centralize("2. Ir para a lista de clientes", consoleSize.getColumn())
-                + ConsoleUtil.NEW_LINE
-                + StringUtil.centralize("3. Ir para a lista de contas", consoleSize.getColumn())
-                + ConsoleUtil.NEW_LINE);
-        ConsoleUtil.skipLines(3);
+        SystemInterfaceUtil.drawInfoScreen(SCREEN_NAME, message, SCREEN_CONTENT, consoleSize);
     }
 
     public Navigation run(String[] args) {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-        String message = "";
-        try {
-            message = args[2];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // do nothing
-        }
+        Message message = new Message("", MessageType.INFO);
+        Navigation navigate = new Navigation();
 
         Scanner s = new Scanner(System.in);
-        Navigation navigate = new Navigation();
         while (true) {
             ConsoleUtil.clearScreen();
             draw(consoleSize, message);
-            System.out.print("Digite o número da opção desejada: ");
+            SystemInterfaceUtil.drawInputPrompt(consoleSize, "Digite o número da opção desejada: ");
+            int userInput = 0;
+            try {
+                userInput = s.nextInt();
+            } catch (InputMismatchException e) {
+                s.nextLine();
+            }
+            System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
-            int userInput = s.nextInt();
             switch (userInput) {
                 case 1:
                     navigate.setScreen(ScreensList.CREATE_ACCOUNT);
@@ -65,15 +58,15 @@ public class MainScreen implements ScreenInterface {
                     navigate.setScreen(ScreensList.ACCOUNTS_LIST);
                     break;
                 default:
-                    message = "Opção inválida!";
+                    message.setText("Opção inválida!");
                     continue;
             }
             break;
         }
         s.close();
 
+        ConsoleUtil.clearScreen();
         navigate.setArgs(args);
-
         return navigate;
     }
 }
