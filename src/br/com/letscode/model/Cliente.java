@@ -1,8 +1,10 @@
 package br.com.letscode.model;
 
+import java.util.ArrayList;
+
 public abstract class Cliente {
     private String nome;
-    private Conta[] contas;
+    private ArrayList<Conta> contas;
 
 
     public String getNome() {
@@ -12,10 +14,10 @@ public abstract class Cliente {
         this.nome = nome;
     }
     
-    public Conta getConta(int id) {
-        return contas[id];
+    public Conta getConta(int codigoConta) {
+        return contas.stream().filter(conta -> conta.codigoConta == codigoConta).findFirst().orElse(null);
     }
-    public Conta[] getContas() {
+    public ArrayList<Conta> getContas() {
         return contas;
     }
 
