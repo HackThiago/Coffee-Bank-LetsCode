@@ -2,11 +2,9 @@ package br.com.letscode.model.conta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ClientInfoStatus;
 
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
-import br.com.letscode.model.cliente.TipoClienteEnum;
 
 public abstract class Conta {
     protected static int qtdContas = 0;
