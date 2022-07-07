@@ -19,4 +19,35 @@ public class SystemInterfaceUtil {
                 + ConsoleUtil.Attribute.RESET.getEscapeCode()
                 + ConsoleUtil.NEW_LINE;
     }
+
+    public static String getMessage(String message, MessageType type, int consoleWidth) {
+        String format = ConsoleUtil.Attribute.BRIGHT.getEscapeCode();
+
+        String formatBGColor;
+        switch (type) {
+            case SUCCESS:
+                formatBGColor = ConsoleUtil.Attribute.FCOL_GREEN.getEscapeCode();
+                break;
+            case ERROR:
+                formatBGColor = ConsoleUtil.Attribute.FCOL_RED.getEscapeCode();
+                break;
+            case WARNING:
+                formatBGColor = ConsoleUtil.Attribute.FCOL_YELLOW.getEscapeCode();
+                break;
+            case INFO:
+                formatBGColor = ConsoleUtil.Attribute.FCOL_BLUE.getEscapeCode();
+                break;
+            default:
+                formatBGColor = ConsoleUtil.Attribute.REVERSE.getEscapeCode();
+                break;
+        }
+        format = format.concat(formatBGColor);
+
+        return format
+                + ConsoleUtil.Attribute.REVERSE.getEscapeCode()
+                + StringUtil.centralize(message, consoleWidth)
+                + StringUtil.blankSpaces((consoleWidth / 2) - (message.length() / 2))
+                + ConsoleUtil.Attribute.RESET.getEscapeCode()
+                + ConsoleUtil.NEW_LINE;
+    }
 }
