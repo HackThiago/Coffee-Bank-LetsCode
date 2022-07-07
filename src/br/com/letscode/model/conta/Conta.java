@@ -26,6 +26,13 @@ public abstract class Conta {
         return this.saldo;
     }
 
+    private void cobraTaxaParaPJ(){
+        // cobra 0.5% por cada saque e transf para PFs
+        if(tipoCliente == TipoClienteEnum.PESSOA_JURIDICA){
+            saldo = saldo.multiply(BigDecimal.valueOf(0.995));
+        }
+    }
+
     public void sacar(BigDecimal quantia) {
         if (saldo.compareTo(quantia) >= 0){
             saldo = saldo.subtract(quantia);
@@ -33,6 +40,7 @@ public abstract class Conta {
             throw new Error("Saldo Insuficiente");
         }
 
+        this.cobraTaxaParaPJ();
     }
 
     public void depositar(BigDecimal quantia){
@@ -47,5 +55,7 @@ public abstract class Conta {
         
         saldo = saldo.subtract(quantia);
         destinatario.saldo.add(quantia);
+
+        this.cobraTaxaParaPJ();
     };
 }
