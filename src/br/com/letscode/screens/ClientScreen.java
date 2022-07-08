@@ -58,8 +58,37 @@ public class ClientScreen implements ScreenInterface {
     }
 
     public Navigation executeUserCommand(String userCommand) throws InvalidCommandException {
-        // TODO
-        return new Navigation(ScreensList.ACCOUNT, null);
+
+        String[] commandOperands = userCommand.split(" ");
+
+        switch (commandOperands[0]) {
+            case "SACAR":
+                // "SACAR QUANTIDADE" - TODO
+                if(!StringUtil.isParseableToDouble(commandOperands[1])){
+                    throw new InvalidCommandException("Quantidade inválida");
+                }
+                return new Navigation(ScreensList.ACCOUNT, null);
+            case "DEPOSITAR":
+                // "DEPOSITAR QUANTIDADE" - TODO
+                if(!StringUtil.isParseableToDouble(commandOperands[1])){
+                    throw new InvalidCommandException("Quantidade inválida");
+                }
+                return new Navigation(ScreensList.ACCOUNT, null);
+            case "INVESTIR":
+                // "INVESTIR QUANTIDADE" - TODO
+                if(!StringUtil.isParseableToDouble(commandOperands[1])){
+                    throw new InvalidCommandException("Quantidade inválida");
+                }
+                return new Navigation(ScreensList.ACCOUNT, null);
+            case "TRANSFERIR":
+                if(!StringUtil.isParseableToDouble(commandOperands[3])){
+                    throw new InvalidCommandException("Quantidade inválida");
+                }
+                // "TRANSFERIR COD_CLIENTE COD_CONTA QUANTIDADE" - TODO
+                return new Navigation(ScreensList.ACCOUNT, null);
+            default:
+                throw new InvalidCommandException("Comando inválido!");
+        }
     }
 
     public Navigation run(Scanner scanner, String[] args) {

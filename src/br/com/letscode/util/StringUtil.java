@@ -94,4 +94,13 @@ public class StringUtil {
                 + "-"
                 + cnpj.substring(12);
     }
+
+    public static boolean isParseableToDouble(String number){
+        try{
+            Double.parseDouble(number);
+        }catch(NumberFormatException e){
+            return false;
+        }
+        return true;
+    }
 }
