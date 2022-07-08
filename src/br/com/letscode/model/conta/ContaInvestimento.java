@@ -6,9 +6,9 @@ import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 
 public class ContaInvestimento extends Conta {
-
     public ContaInvestimento(Cliente cliente) {
         super(cliente);
+        super.rendimento = cliente.getRendimentoContaInvestimento();
     }
 
     public void investir(BigDecimal quantia, Cliente cliente) {

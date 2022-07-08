@@ -33,6 +33,7 @@ public abstract class Conta {
     protected int codigoConta;
     protected Cliente cliente;
     protected BigDecimal saldo;
+    protected BigDecimal rendimento = new BigDecimal(1);
 
     public Conta(Cliente cliente) {
         codigoConta = ++qtdContas;
@@ -48,7 +49,7 @@ public abstract class Conta {
         return this.saldo;
     }
 
-    private void cobraTaxaParaPJ(){
+    private void cobrarTaxaOperacao(){
         // cobra 0.5% por cada saque e transf para PFs
         if(cliente instanceof ClientePF){
             saldo = saldo.multiply(BigDecimal.valueOf(0.995));
@@ -62,7 +63,7 @@ public abstract class Conta {
             throw new Error("Saldo Insuficiente");
         }
 
-        this.cobraTaxaParaPJ();
+        this.cobrarTaxaOperacao();
     }
 
     public void depositar(BigDecimal quantia){
@@ -78,11 +79,10 @@ public abstract class Conta {
         saldo = saldo.subtract(quantia);
         destinatario.saldo.add(quantia);
 
-        this.cobraTaxaParaPJ();
+        this.cobrarTaxaOperacao();
     };
 
-    public void efetuaRendimento(){
-        // TODO - método que será executado todo dia, a meia noite, para
-        //   efetuar o rendimento em todas as contas
+    public void efetuarRendimento(){
+        this.saldo = this.saldo.multiply(rendimento);
     }
 }

@@ -1,5 +1,7 @@
 package br.com.letscode.model.cliente;
 
+import java.math.BigDecimal;
+
 import br.com.letscode.model.conta.Conta;
 import br.com.letscode.model.conta.ContaCorrente;
 import br.com.letscode.model.conta.ContaInvestimento;
@@ -7,18 +9,28 @@ import br.com.letscode.model.conta.ContaPoupanca;
 import br.com.letscode.model.conta.TipoContaEnum;
 
 public class ClientePF extends Cliente {
+    public static final BigDecimal RENDIMENTO_CONTA_INVESTIMENTO = new BigDecimal(1.01);
+    public final BigDecimal RENDIMENTO_CONTA_POUPANCA = new BigDecimal(1.005);
+
     private int cpf;
 
-    
     public int getCpf() {
         return cpf;
     }
-
 
     public void setCpf(int cpf) {
         this.cpf = cpf;
     }
 
+    @Override
+    public BigDecimal getRendimentoContaPoupanca(){
+        return RENDIMENTO_CONTA_POUPANCA;
+    }
+
+    @Override
+    public BigDecimal getRendimentoContaInvestimento(){
+        return RENDIMENTO_CONTA_INVESTIMENTO;
+    }
 
     @Override
     public Conta abrirConta(TipoContaEnum tipo) {
