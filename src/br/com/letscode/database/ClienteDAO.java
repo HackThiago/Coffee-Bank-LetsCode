@@ -2,8 +2,6 @@ package br.com.letscode.database;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
