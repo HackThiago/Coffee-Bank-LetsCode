@@ -23,20 +23,20 @@ public class ClientePF extends Cliente {
     }
 
     @Override
-    public BigDecimal getRendimentoContaPoupanca(){
+    public BigDecimal getRendimentoContaPoupanca() {
         return RENDIMENTO_CONTA_POUPANCA;
     }
 
     @Override
-    public BigDecimal getRendimentoContaInvestimento(){
+    public BigDecimal getRendimentoContaInvestimento() {
         return RENDIMENTO_CONTA_INVESTIMENTO;
     }
 
     @Override
     public Conta abrirConta(TipoContaEnum tipo) {
-        
+
         Conta conta = null;
-        
+
         switch (tipo) {
             case CORRENTE:
                 conta = new ContaCorrente(this);
@@ -50,7 +50,7 @@ public class ClientePF extends Cliente {
             default:
                 throw new Error("Tipo de conta inválido");
         }
-        //set the conta id to the next sequence value
+        // set the conta id to the next sequence value
         this.setId(nextId());
         // add conta to arraylist of contas
         this.addConta(conta);
@@ -58,5 +58,14 @@ public class ClientePF extends Cliente {
         return conta;
     }
 
+    @Override
+    public String getDocument() {
+        return getCpf();
+    }
+
+    @Override
+    public void setDocument(String document) {
+        this.setCpf(document);
+    }
 
 }

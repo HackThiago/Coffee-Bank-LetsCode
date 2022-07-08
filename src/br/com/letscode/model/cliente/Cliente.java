@@ -55,4 +55,7 @@ public abstract class Cliente {
 
     public abstract Conta abrirConta(TipoContaEnum tipo);
 
+    public abstract String getDocument();
+
+    public abstract void setDocument(String document);
 }
