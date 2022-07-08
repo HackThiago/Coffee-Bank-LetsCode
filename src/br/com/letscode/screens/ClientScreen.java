@@ -64,12 +64,8 @@ public class ClientScreen implements ScreenInterface {
 
     public Navigation run(Scanner scanner, String[] args) {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-        String clientId = args[2];
         Message message = new Message("", null);
-        Navigation navigate = new Navigation();
-
-        // TODO: substituir pela função que busque um cliente de verdade
-        Cliente client = ClienteDAO.getMockClient2();
+        Cliente client = ClienteDAO.getClienteById(args[2]);
 
         while (true) {
             ConsoleUtil.clearScreen();
