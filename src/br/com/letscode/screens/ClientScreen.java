@@ -66,6 +66,7 @@ public class ClientScreen implements ScreenInterface {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         Message message = new Message("", null);
         Cliente client = ClienteDAO.getClienteById(args[2]);
+        args = StringUtil.removeArgFromList(args, 2);
 
         while (true) {
             ConsoleUtil.clearScreen();
@@ -80,7 +81,7 @@ public class ClientScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.CLIENTS_LIST, StringUtil.removeArgFromList(args, 2));
+                return new Navigation(ScreensList.CLIENTS_LIST, args);
             } catch (NoSuchElementException e) {
                 // do nothing
             }
