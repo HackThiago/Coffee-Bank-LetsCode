@@ -22,8 +22,6 @@ public class MainScreen implements ScreenInterface {
                 + StringUtil.centralizeBlock("1. Criar um cliente"
                         + ConsoleUtil.NEW_LINE
                         + "2. Ir para a lista de clientes"
-                        + ConsoleUtil.NEW_LINE
-                        + "3. Ir para a lista de contas"
                         + ConsoleUtil.NEW_LINE,
                         consoleSize.getColumn())
                 + ConsoleUtil.NEW_LINE;
@@ -64,9 +62,6 @@ public class MainScreen implements ScreenInterface {
                     break;
                 case 2:
                     navigate.setScreen(ScreensList.CLIENTS_LIST);
-                    break;
-                case 3:
-                    navigate.setScreen(ScreensList.ACCOUNTS_LIST);
                     break;
                 default:
                     message.setText("Opção inválida!");
