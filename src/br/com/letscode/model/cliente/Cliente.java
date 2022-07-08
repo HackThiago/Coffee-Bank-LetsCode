@@ -4,13 +4,23 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import br.com.letscode.model.conta.Conta;
-import br.com.letscode.model.conta.TipoContaEnum;
+import br.com.letscode.model.conta.TipoContaEnum;   
 
 public abstract class Cliente {
+    private String id;
+    private static int idSequence = 1;
     private String nome;
     private ArrayList<Conta> contas;
 
-
+    public String getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = String.valueOf(id);
+    }
+    public static int nextId(){
+        return idSequence++;
+    }
     public String getNome() {
         return nome;
     } 

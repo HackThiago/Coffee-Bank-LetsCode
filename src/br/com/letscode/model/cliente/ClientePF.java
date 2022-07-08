@@ -12,13 +12,13 @@ public class ClientePF extends Cliente {
     public static final BigDecimal RENDIMENTO_CONTA_INVESTIMENTO = new BigDecimal(1.01);
     public final BigDecimal RENDIMENTO_CONTA_POUPANCA = new BigDecimal(1.005);
 
-    private int cpf;
+    private String cpf;
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
@@ -50,7 +50,8 @@ public class ClientePF extends Cliente {
             default:
                 throw new Error("Tipo de conta inválido");
         }
-
+        //set the conta id to the next sequence value
+        this.setId(nextId());
         // add conta to arraylist of contas
         this.addConta(conta);
 
