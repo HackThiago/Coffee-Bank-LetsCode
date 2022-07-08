@@ -1,7 +1,5 @@
 package br.com.letscode.model;
 
-import br.com.letscode.util.MessageType;
-
 public class Message {
     private String text;
     private MessageType type;

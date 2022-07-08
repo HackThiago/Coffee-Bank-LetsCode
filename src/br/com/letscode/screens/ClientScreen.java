@@ -7,15 +7,15 @@ import br.com.letscode.database.ClienteDAO;
 import br.com.letscode.error.ExitSignalException;
 import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.error.InvalidCommandException;
+import br.com.letscode.model.ConsolePosition;
 import br.com.letscode.model.Message;
+import br.com.letscode.model.MessageType;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.ClientePJ;
 import br.com.letscode.model.conta.Conta;
-import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
-import br.com.letscode.util.MessageType;
 import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
