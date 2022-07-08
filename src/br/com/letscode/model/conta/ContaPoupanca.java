@@ -9,4 +9,8 @@ public class ContaPoupanca extends Conta {
         super.rendimento = cliente.getRendimentoContaPoupanca();
     }
 
+    @Override
+    public String getTipoConta() {
+        return "POUPANÇA";
+    }
 }

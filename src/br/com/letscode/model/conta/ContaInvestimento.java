@@ -16,4 +16,9 @@ public class ContaInvestimento extends Conta {
             saldo.add(quantia.multiply((BigDecimal.valueOf(0.01))));
         }
     }
+
+    @Override
+    public String getTipoConta() {
+        return "INVESTIMENTO";
+    }
 }

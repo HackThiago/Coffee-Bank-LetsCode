@@ -8,4 +8,9 @@ public class ContaCorrente extends Conta {
         super(cliente);
     }
 
+    @Override
+    public String getTipoConta() {
+        return "CORRENTE";
+    }
+
 }
