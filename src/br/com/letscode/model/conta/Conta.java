@@ -6,27 +6,6 @@ import java.math.RoundingMode;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 
-
-/** TODO - add regras de taxas e rendimentos -- nova modelagem
- * Os clientes podem ser pessoa física ou jurídica,
- * sendo que para PJ existe a cobrança de uma taxa de 0.5%
- * para cada saque ou transferência (mudar isso na modelagem).
- * 
- * Além do produto conta-corrente,
- * os clientes PF podem abrir uma conta-poupança e conta-investimento.
- * 
- * Clientes PJ não abrem poupança,
- * mas seus rendimentos em conta-investimento rendem 2% a mais que a PF.
- * 
- * Conta-poupanca rende 0.5%
- * Conta-investimento PF rende 1%
- * Para fins didaticos,
- * o rendimento pode ser calculado quando ha investimento
- * 
- * Qualquer outro tipo de calculo de investimento sera valido para este exercicio.
- * (virada do dia, por exemplo)
- * */
-
 public abstract class Conta {
     protected static int qtdContas = 0;
 
@@ -41,48 +20,50 @@ public abstract class Conta {
         this.cliente = cliente;
     }
 
-    public int getCodigoConta(){
+    public int getCodigoConta() {
         return this.codigoConta;
     }
-    
+
     public BigDecimal consultarSaldo() {
         return this.saldo;
     }
 
-    private void cobrarTaxaOperacao(){
+    private void cobrarTaxaOperacao() {
         // cobra 0.5% por cada saque e transf para PFs
-        if(cliente instanceof ClientePF){
+        if (cliente instanceof ClientePF) {
             saldo = saldo.multiply(BigDecimal.valueOf(0.995));
         }
     }
 
     public void sacar(BigDecimal quantia) {
-        if (saldo.compareTo(quantia) >= 0){
+        if (saldo.compareTo(quantia) >= 0) {
             saldo = saldo.subtract(quantia);
-        }else{
+        } else {
             throw new Error("Saldo Insuficiente");
         }
 
         this.cobrarTaxaOperacao();
     }
 
-    public void depositar(BigDecimal quantia){
+    public void depositar(BigDecimal quantia) {
         this.saldo.add(quantia);
     };
 
-    public void transferir(Conta destinatario, BigDecimal quantia){
+    public void transferir(Conta destinatario, BigDecimal quantia) {
         final int LESS_THAN = -1;
-        if(this.consultarSaldo().compareTo(quantia) == LESS_THAN){
+        if (this.consultarSaldo().compareTo(quantia) == LESS_THAN) {
             throw new Error("Saldo insuficiente");
         }
-        
+
         saldo = saldo.subtract(quantia);
         destinatario.saldo.add(quantia);
 
         this.cobrarTaxaOperacao();
     };
 
-    public void efetuarRendimento(){
+    public void efetuarRendimento() {
         this.saldo = this.saldo.multiply(rendimento);
     }
+
+    public abstract String getTipoConta();
 }
