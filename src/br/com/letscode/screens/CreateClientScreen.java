@@ -173,6 +173,7 @@ public class CreateClientScreen implements ScreenInterface {
             break;
         }
 
+        client.setId(Cliente.nextId());
         ClienteDAO.createCliente(client);
 
         ConsoleUtil.clearScreen();
