@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import br.com.letscode.database.ClienteDAO;
 import br.com.letscode.error.ExitSignalException;
 import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.model.Message;
 import br.com.letscode.model.Navigation;
+import br.com.letscode.model.cliente.Cliente;
+import br.com.letscode.model.cliente.ClientePF;
+import br.com.letscode.model.cliente.ClientePJ;
 import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
 import br.com.letscode.util.MessageType;
@@ -79,10 +83,8 @@ public class CreateClientScreen implements ScreenInterface {
         List<Integer> highlitedLines = new ArrayList<Integer>();
         highlitedLines.add(0);
 
-        // TODO: substituir pela classe cliente quando estiver pronta
+        Cliente client = new ClientePF();
         String tipoCliente = "";
-        String idCliente = "";
-        String nomeCliente = "";
 
         while (true) {
             String promptMessage = "";
@@ -126,10 +128,11 @@ public class CreateClientScreen implements ScreenInterface {
             System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
             if (!validateAnswer(formStep, userInput)) {
-                message.setText("Resposta inválida! ");
+                message.setText("Resposta inválida!");
                 System.out.println(userInput);
                 continue;
             }
+
             message.setText("");
 
             switch (formStep) {
@@ -137,9 +140,11 @@ public class CreateClientScreen implements ScreenInterface {
                     tipoCliente = userInput.toUpperCase();
                     switch (tipoCliente) {
                         case "PF":
+                            client = new ClientePF();
                             formStep++;
                             break;
                         case "PJ":
+                            client = new ClientePJ();
                             formStep += 2;
                             break;
                         default:
@@ -149,11 +154,18 @@ public class CreateClientScreen implements ScreenInterface {
                 case 2:
                     formStep++;
                 case 3:
-                    idCliente = userInput.replaceAll("\\.|-|/", "");
-                    formStep++;
+                    client.setDocument(userInput.replaceAll("\\.|-|/", ""));
+                    if (ClienteDAO.existCliente(client)) {
+                        client.setDocument(null);
+                        message.setText("Documento já cadastrado no banco!");
+                        formStep--;
+                    } else {
+                        message.setText("");
+                        formStep++;
+                    }
                     continue;
                 case 4:
-                    nomeCliente = userInput;
+                    client.setNome(userInput);
                     formStep++;
                 default:
                     break;
@@ -161,9 +173,11 @@ public class CreateClientScreen implements ScreenInterface {
             break;
         }
 
+        ClienteDAO.createCliente(client);
+
         ConsoleUtil.clearScreen();
         navigate.setScreen(ScreensList.CLIENT);
-        navigate.setArgs(StringUtil.addArgToList(args, idCliente));
+        navigate.setArgs(StringUtil.addArgToList(args, client.getId()));
         return navigate;
     }
 
