@@ -7,15 +7,15 @@ import br.com.letscode.database.ClienteDAO;
 import br.com.letscode.error.ExitSignalException;
 import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.error.InvalidCommandException;
+import br.com.letscode.model.ConsolePosition;
 import br.com.letscode.model.Message;
+import br.com.letscode.model.MessageType;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.ClientePJ;
 import br.com.letscode.model.conta.Conta;
-import br.com.letscode.util.ConsolePosition;
 import br.com.letscode.util.ConsoleUtil;
-import br.com.letscode.util.MessageType;
 import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
@@ -95,6 +95,7 @@ public class ClientScreen implements ScreenInterface {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         Message message = new Message("", null);
         Cliente client = ClienteDAO.getClienteById(args[2]);
+        args = StringUtil.removeArgFromList(args, 2);
 
         while (true) {
             ConsoleUtil.clearScreen();
@@ -109,7 +110,7 @@ public class ClientScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.CLIENTS_LIST, StringUtil.removeArgFromList(args, 2));
+                return new Navigation(ScreensList.CLIENTS_LIST, args);
             } catch (NoSuchElementException e) {
                 // do nothing
             }

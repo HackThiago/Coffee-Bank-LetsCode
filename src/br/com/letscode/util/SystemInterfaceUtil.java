@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import br.com.letscode.error.ExitSignalException;
 import br.com.letscode.error.GoBackSignalException;
+import br.com.letscode.model.ConsolePosition;
 import br.com.letscode.model.Message;
 
 public class SystemInterfaceUtil {

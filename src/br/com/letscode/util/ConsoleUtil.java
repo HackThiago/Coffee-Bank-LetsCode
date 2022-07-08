@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import br.com.letscode.model.ConsolePosition;
+
 public class ConsoleUtil {
     static final int DEFAULT_SPEED = 1200;
 

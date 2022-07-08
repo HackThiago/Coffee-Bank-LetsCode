@@ -8,6 +8,6 @@ public class ClientsListScreen implements ScreenInterface {
     public Navigation run(Scanner scanner, String[] args) {
         System.out.println("Clients List Screen");
 
-        return new Navigation(ScreensList.EXIT, null);
+        return new Navigation(ScreensList.MAIN, args);
     }
 }
