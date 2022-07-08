@@ -17,7 +17,7 @@ public abstract class Cliente {
     }
 
     public void setId(int id) {
-        this.id = String.valueOf(id);
+        this.id = this.id == null ? this.id : String.valueOf(id);
     }
 
     public static int nextId() {
