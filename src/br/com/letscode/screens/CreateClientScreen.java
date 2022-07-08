@@ -28,7 +28,7 @@ public class CreateClientScreen implements ScreenInterface {
                 + StringUtil.multiply(ConsoleUtil.NEW_LINE, 4)
                 + StringUtil.centralizeBlock("1. Tipo de cliente (Pessoa Física ou Pessoa Jurídica)"
                         + ConsoleUtil.NEW_LINE
-                        + "2. CPF"
+                        + "2. CPF/CNPJ"
                         + ConsoleUtil.NEW_LINE
                         + "3. Nome completo"
                         + ConsoleUtil.NEW_LINE,
