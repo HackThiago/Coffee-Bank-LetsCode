@@ -15,20 +15,11 @@ public enum ScreensList {
             case CLIENT:
                 screenInstance = new ClientScreen();
                 break;
-            case ACCOUNT:
-                screenInstance = new AccountScreen();
-                break;
             case CLIENTS_LIST:
                 screenInstance = new ClientsListScreen();
                 break;
-            case ACCOUNTS_LIST:
-                screenInstance = new AccountsListScreen();
-                break;
             case CREATE_CLIENT:
                 screenInstance = new CreateClientScreen();
-                break;
-            case CREATE_ACCOUNT:
-                screenInstance = new CreateAccountScreen();
                 break;
             case EXIT:
                 screenInstance = new ExitScreen();
