@@ -7,7 +7,7 @@ import br.com.letscode.model.conta.Conta;
 import br.com.letscode.model.conta.TipoContaEnum;
 
 public abstract class Cliente {
-    private String id;
+    private String id = "";
     private static int idSequence = 1;
     private String nome;
     private ArrayList<Conta> contas = new ArrayList<Conta>();
@@ -17,7 +17,9 @@ public abstract class Cliente {
     }
 
     public void setId(int id) {
-        this.id = this.id == null ? this.id : String.valueOf(id);
+        if (this.id.length() == 0) {
+            this.id = String.valueOf(id);
+        }
     }
 
     public static int nextId() {
