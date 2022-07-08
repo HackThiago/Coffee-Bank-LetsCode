@@ -26,6 +26,19 @@ public class ClienteDAO {
         listaCliente.remove(newCliente); // Don't know if it works
     }
 
+    public static boolean existCliente(String document) {
+        for (Cliente c : listaCliente) {
+            if (c.getDocument().equals(document)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean existCliente(Cliente cliente) {
+        return existCliente(cliente.getDocument());
+    }
+
     public static List<Cliente> getMockClientList() {
         List<Cliente> clients = new ArrayList<Cliente>();
 
