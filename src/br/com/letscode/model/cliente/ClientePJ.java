@@ -11,13 +11,13 @@ public class ClientePJ extends Cliente {
     public static final BigDecimal RENDIMENTO_CONTA_INVESTIMENTO =
         ClientePF.RENDIMENTO_CONTA_INVESTIMENTO.add(new BigDecimal(0.02));
 
-    int cnpj;
+    String cnpj;
 
-    public int getCnpj() {
+    public String getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(int cnpj) {
+    public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
@@ -43,7 +43,8 @@ public class ClientePJ extends Cliente {
             default:
                 throw new Error("Tipo de conta inválido");
         }
-
+        //set the conta id to the next sequence value
+        this.setId(nextId());
         // add conta to arraylist of contas
         this.addConta(conta);
 
