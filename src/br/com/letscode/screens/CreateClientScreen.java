@@ -1,5 +1,7 @@
 package br.com.letscode.screens;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -14,7 +16,7 @@ import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
 public class CreateClientScreen implements ScreenInterface {
-    private static void draw(ConsolePosition consoleSize, Message message) {
+    private static void draw(ConsolePosition consoleSize, Message message, List<Integer> highlitedLines) {
         final String SCREEN_NAME = "Cadastrar cliente";
         final String SCREEN_CONTENT = StringUtil.centralize(
                 "########## Vamos precisar das seguintes informações do cliente: ##########",
@@ -29,7 +31,19 @@ public class CreateClientScreen implements ScreenInterface {
                         consoleSize.getColumn())
                 + ConsoleUtil.NEW_LINE;
 
-        SystemInterfaceUtil.drawInfoScreen(SCREEN_NAME, message, SCREEN_CONTENT, consoleSize);
+        String screenContent = "";
+        String[] screenContentLines = SCREEN_CONTENT.split("\n");
+        for (int i = 0; i < screenContentLines.length; i++) {
+            String line = screenContentLines[i];
+            if (highlitedLines.contains(i)) {
+                line = ConsoleUtil.Attribute.REVERSE.getEscapeCode()
+                        + line
+                        + ConsoleUtil.Attribute.RESET.getEscapeCode();
+            }
+            screenContent += line + ConsoleUtil.NEW_LINE;
+        }
+
+        SystemInterfaceUtil.drawInfoScreen(SCREEN_NAME, message, screenContent, consoleSize);
     }
 
     private static boolean validateAnswer(int formStep, String answer) {
@@ -62,6 +76,8 @@ public class CreateClientScreen implements ScreenInterface {
         Message message = new Message("", MessageType.ERROR);
         Navigation navigate = new Navigation();
         int formStep = 1;
+        List<Integer> highlitedLines = new ArrayList<Integer>();
+        highlitedLines.add(0);
 
         // TODO: substituir pela classe cliente quando estiver pronta
         String tipoCliente = "";
@@ -69,27 +85,32 @@ public class CreateClientScreen implements ScreenInterface {
         String nomeCliente = "";
 
         while (true) {
-            ConsoleUtil.clearScreen();
-            draw(consoleSize, message);
-
             String promptMessage = "";
             switch (formStep) {
                 case 1:
                     promptMessage = "Digite o tipo de cliente (PF ou PJ): ";
+                    highlitedLines.set(0, 4);
                     break;
                 case 2:
                     promptMessage = "Digite o CPF do cliente: ";
+                    highlitedLines.set(0, 5);
                     break;
                 case 3:
                     promptMessage = "Digite o CNPJ do cliente: ";
+                    highlitedLines.set(0, 5);
                     break;
                 case 4:
                     promptMessage = "Digite o nome completo do cliente: ";
+                    highlitedLines.set(0, 6);
                     break;
                 default:
                     promptMessage = "";
                     break;
             }
+
+            ConsoleUtil.clearScreen();
+            draw(consoleSize, message, highlitedLines);
+
             String userInput = "";
             try {
                 userInput = SystemInterfaceUtil.getUserInput(scanner, consoleSize, promptMessage).strip();
@@ -142,7 +163,7 @@ public class CreateClientScreen implements ScreenInterface {
 
         ConsoleUtil.clearScreen();
         navigate.setScreen(ScreensList.CLIENT);
-        navigate.setArgs(args);
+        navigate.setArgs(StringUtil.addArgToList(args, idCliente));
         return navigate;
     }
 
