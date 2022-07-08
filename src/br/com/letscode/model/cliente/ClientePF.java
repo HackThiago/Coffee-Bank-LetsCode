@@ -12,13 +12,13 @@ public class ClientePF extends Cliente {
     public static final BigDecimal RENDIMENTO_CONTA_INVESTIMENTO = new BigDecimal(1.01);
     public final BigDecimal RENDIMENTO_CONTA_POUPANCA = new BigDecimal(1.005);
 
-    private int cpf;
+    private String cpf;
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
