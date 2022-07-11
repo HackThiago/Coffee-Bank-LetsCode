@@ -33,7 +33,7 @@ public class ClienteDAO {
             Cliente cliente = listaCliente.get(i);
             if(cliente instanceof ClientePF){
                 ClientePF clientePf = (ClientePF) cliente;
-                if(clientePf.getCpf() == cpf){
+                if (clientePf.getCpf().equals(cpf)) {
                     return clientePf;
                 }
             }
@@ -46,7 +46,7 @@ public class ClienteDAO {
             Cliente cliente = listaCliente.get(i);
             if(cliente instanceof ClientePJ){
                 ClientePJ clientePj = (ClientePJ) cliente;
-                if(clientePj.getCnpj() == cnpj){
+                if (clientePj.getCnpj().equals(cnpj)) {
                     return clientePj;
                 }
             }
