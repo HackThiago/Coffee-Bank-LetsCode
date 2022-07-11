@@ -2,7 +2,9 @@ package br.com.letscode.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import br.com.letscode.error.ClientNotFoundException;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.ClientePJ;
@@ -23,9 +25,9 @@ public class ClienteDAO {
         listaCliente.add(newCliente);
     }
 
-    public static Cliente getClienteById(String id){
-        return  listaCliente.stream().filter(cliente -> cliente.getId() == id)
-            .findFirst().orElse(null);
+    public static Cliente getClienteById(String id) {
+        return listaCliente.stream().filter(cliente -> cliente.getId() == id)
+                .findFirst().orElse(null);
     }
 
     public static ClientePF getClienteByCPF(String cpf) throws ClientNotFoundException {
@@ -54,9 +56,9 @@ public class ClienteDAO {
         throw new ClientNotFoundException("Cliente com este CNPJ não encontrado");
     }
 
-    public static ArrayList<Cliente> getClientesByNome(String nome){
-        return  listaCliente.stream().filter(cliente -> cliente.getNome() == nome)
-            .collect(ArrayListUtil.toArrayList());
+    public static ArrayList<Cliente> getClientesByNome(String nome) {
+        return listaCliente.stream().filter(cliente -> cliente.getNome() == nome)
+                .collect(ArrayListUtil.toArrayList());
     }
 
     public static void deleteCliente(Cliente newCliente) {
@@ -74,6 +76,24 @@ public class ClienteDAO {
 
     public static boolean existCliente(Cliente cliente) {
         return existCliente(cliente.getDocument());
+    }
+
+    public static void generateMockDatabase(int quantity) {
+        Random rand = new Random();
+        for (int i = 0; i < quantity; i++) {
+            Cliente client;
+            if (rand.nextInt(2) == 0) {
+                client = new ClientePJ();
+                client.setDocument(String.valueOf(rand.nextLong(10000000000000L, 99999999999999L)));
+                client.setNome("Cliente Pessoa Jurídica " + (i + 1));
+            } else {
+                client = new ClientePF();
+                client.setDocument(String.valueOf(rand.nextLong(10000000000L, 99999999999L)));
+                client.setNome("Cliente Pessoa Física " + (i + 1));
+            }
+            client.setId(Cliente.nextId());
+            createCliente(client);
+        }
     }
 
     public static List<Cliente> getMockClientList() {

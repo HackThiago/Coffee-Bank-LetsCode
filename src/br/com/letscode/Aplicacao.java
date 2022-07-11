@@ -2,6 +2,7 @@ package br.com.letscode;
 
 import java.util.Scanner;
 
+import br.com.letscode.database.ClienteDAO;
 import br.com.letscode.model.Navigation;
 import br.com.letscode.screens.ExitScreen;
 import br.com.letscode.screens.ScreenInterface;
@@ -10,6 +11,8 @@ import br.com.letscode.util.ConsoleUtil;
 
 public class Aplicacao {
     public static void main(String[] args) throws Exception {
+        ClienteDAO.generateMockDatabase(50);
+
         ConsoleUtil.clearScreen();
 
         Navigation navigate = new Navigation(ScreensList.START, null);
