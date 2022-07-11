@@ -1,5 +1,6 @@
 package br.com.letscode.screens;
 
+import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -15,11 +16,14 @@ import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.ClientePJ;
 import br.com.letscode.model.conta.Conta;
+import br.com.letscode.model.conta.TipoContaEnum;
 import br.com.letscode.util.ConsoleUtil;
 import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
 public class ClientScreen implements ScreenInterface {
+    private static final int HEADER_LINES = 8;
+
     private static String drawAccountsList(Cliente client) {
         String accountsList = "";
 
@@ -37,55 +41,167 @@ public class ClientScreen implements ScreenInterface {
         return accountsList;
     }
 
-    private static void draw(ConsolePosition consoleSize, Message message, Cliente client) {
+    private static void draw(ConsolePosition consoleSize, Message message, String screenContent, Cliente client,
+            int currentPage,
+            int totalPages) {
         final String SCREEN_NAME = "Detalhamento cliente";
-        final String SCREEN_CONTENT = StringUtil.centralize("########## "
+        final String SCREEN_HEADER = StringUtil.centralize("########## "
                 + client.getNome()
                 + " ##########",
                 consoleSize.getColumn())
-                + StringUtil.multiply(ConsoleUtil.NEW_LINE, 4)
+                + ConsoleUtil.NEW_LINE
                 + StringUtil.centralizeBlock(
                         (client.getClass() == ClientePF.class
                                 ? ("CPF: " + StringUtil.formatCPF(((ClientePF) client).getCpf()))
                                 : ("CNPJ: " + StringUtil.formatCNPJ(((ClientePJ) client).getCnpj())))
-                                + StringUtil.multiply(ConsoleUtil.NEW_LINE, 2)
-                                + drawAccountsList(client)
                                 + ConsoleUtil.NEW_LINE,
                         consoleSize.getColumn())
-                + ConsoleUtil.NEW_LINE;
+                + ConsoleUtil.NEW_LINE
+                + StringUtil.centralize("- Comandos disponiveis -", consoleSize.getColumn())
+                + ConsoleUtil.NEW_LINE
+                + StringUtil.centralizeBlock("ABRIR CONTA {CORRENTE | POUPANCA | INVESTIMENTO}"
+                        + ConsoleUtil.NEW_LINE
+                        + "SACAR {CÓDIGO CONTA} {QUANTIA}"
+                        + ConsoleUtil.NEW_LINE
+                        + "DEPOSITAR {CÓDIGO CONTA} {QUANTIA}"
+                        + ConsoleUtil.NEW_LINE
+                        + "INVESTIR {CÓDIGO CONTA} {QUANTIA}"
+                        + ConsoleUtil.NEW_LINE
+                        + "TRANSFERIR {CÓDIGO CONTA ORIGEM} {CÓDIGO CONTA DESTINO} {QUANTIA}", consoleSize.getColumn());
 
-        SystemInterfaceUtil.drawInfoScreen(SCREEN_NAME, message, SCREEN_CONTENT, consoleSize);
+        SystemInterfaceUtil.drawPaginationScreen(SCREEN_NAME, message, SCREEN_HEADER, screenContent, consoleSize,
+                currentPage, totalPages);
     }
 
-    public Navigation executeUserCommand(String userCommand) throws InvalidCommandException {
+    public Navigation executeUserCommand(Cliente client, String userCommand, int totalPages, String[] args)
+            throws InvalidCommandException {
+        int page = Integer.parseInt(args[3]);
 
-        String[] commandOperands = userCommand.split(" ");
+        if (userCommand.equals("\\n")) {
+            if (page >= totalPages) {
+                throw new InvalidCommandException("Não há mais páginas");
+            }
+            args = StringUtil.removeArgFromList(args, 3);
+            return new Navigation(ScreensList.CLIENT, StringUtil.addArgToList(args, String.valueOf(page + 1)));
+        }
+        if (userCommand.equals("\\p")) {
+            if (page <= 1) {
+                throw new InvalidCommandException("Não há mais páginas");
+            }
+            args = StringUtil.removeArgFromList(args, 3);
+            return new Navigation(ScreensList.CLIENT, StringUtil.addArgToList(args, String.valueOf(page - 1)));
+        }
 
-        switch (commandOperands[0]) {
+        String[] commandOperands = userCommand.strip().split(" ");
+
+        Conta account;
+        BigDecimal value;
+        switch (commandOperands[0].toUpperCase()) {
+            case "ABRIR":
+                if (commandOperands.length != 3 || !commandOperands[1].matches("CONTA")) {
+                    throw new InvalidCommandException("Comando inválido!");
+                }
+
+                TipoContaEnum accountType = null;
+                switch (commandOperands[2].toUpperCase()) {
+                    case "CORRENTE":
+                        accountType = TipoContaEnum.CORRENTE;
+                        break;
+                    case "POUPANCA":
+                        accountType = TipoContaEnum.POUPANCA;
+                        break;
+                    case "INVESTIMENTO":
+                        accountType = TipoContaEnum.INVESTIMENTO;
+                        break;
+                    default:
+                        break;
+                }
+
+                client.abrirConta(accountType);
+                return new Navigation(ScreensList.CLIENT, args);
             case "SACAR":
-                // "SACAR QUANTIDADE" - TODO
-                if(!StringUtil.isParseableToDouble(commandOperands[1])){
-                    throw new InvalidCommandException("Quantidade inválida");
+                if (commandOperands.length != 3) {
+                    throw new InvalidCommandException("Comando inválido!");
                 }
-                return new Navigation(ScreensList.ACCOUNT, null);
+
+                account = client.getConta(Integer.parseInt(commandOperands[1]));
+                if (account == null) {
+                    throw new InvalidCommandException("Conta não pertence a esse cliente!");
+                }
+
+                try {
+                    value = BigDecimal.valueOf(Double.parseDouble(commandOperands[2]));
+                } catch (NumberFormatException e) {
+                    throw new InvalidCommandException("Quantia inválida para saque!");
+                }
+
+                account.sacar(value);
+
+                return new Navigation(ScreensList.CLIENT, args);
             case "DEPOSITAR":
-                // "DEPOSITAR QUANTIDADE" - TODO
-                if(!StringUtil.isParseableToDouble(commandOperands[1])){
-                    throw new InvalidCommandException("Quantidade inválida");
+                if (commandOperands.length != 3) {
+                    throw new InvalidCommandException("Comando inválido!");
                 }
-                return new Navigation(ScreensList.ACCOUNT, null);
+
+                account = client.getConta(Integer.parseInt(commandOperands[1]));
+                if (account == null) {
+                    throw new InvalidCommandException("Conta não pertence a esse cliente!");
+                }
+
+                try {
+                    value = BigDecimal.valueOf(Double.parseDouble(commandOperands[2]));
+                } catch (NumberFormatException e) {
+                    throw new InvalidCommandException("Quantia inválida para depósito!");
+                }
+
+                account.depositar(value);
+
+                return new Navigation(ScreensList.CLIENT, args);
             case "INVESTIR":
-                // "INVESTIR QUANTIDADE" - TODO
-                if(!StringUtil.isParseableToDouble(commandOperands[1])){
-                    throw new InvalidCommandException("Quantidade inválida");
+                if (commandOperands.length != 3) {
+                    throw new InvalidCommandException("Comando inválido!");
                 }
-                return new Navigation(ScreensList.ACCOUNT, null);
+
+                account = client.getConta(Integer.parseInt(commandOperands[1]));
+                if (account == null) {
+                    throw new InvalidCommandException("Conta não pertence a esse cliente!");
+                }
+                if (!account.getTipoConta().equals("INVESTIMENTO") && !account.getTipoConta().equals("POUPANÇA")) {
+                    throw new InvalidCommandException("Operação inválida para esse tipo de conta!");
+                }
+
+                try {
+                    value = BigDecimal.valueOf(Double.parseDouble(commandOperands[2]));
+                } catch (NumberFormatException e) {
+                    throw new InvalidCommandException("Quantia inválida para depósito!");
+                }
+
+                account.depositar(value);
+
+                return new Navigation(ScreensList.CLIENT, args);
             case "TRANSFERIR":
-                if(!StringUtil.isParseableToDouble(commandOperands[3])){
-                    throw new InvalidCommandException("Quantidade inválida");
+                if (commandOperands.length != 4) {
+                    throw new InvalidCommandException("Comando inválido!");
                 }
-                // "TRANSFERIR COD_CLIENTE COD_CONTA QUANTIDADE" - TODO
-                return new Navigation(ScreensList.ACCOUNT, null);
+
+                account = client.getConta(Integer.parseInt(commandOperands[1]));
+                Conta receiver = ClienteDAO.getContaById(Integer.parseInt(commandOperands[2]));
+                if (account == null) {
+                    throw new InvalidCommandException("Conta não pertence a esse cliente!");
+                }
+                if (receiver == null) {
+                    throw new InvalidCommandException("Conta inexistente!");
+                }
+
+                try {
+                    value = BigDecimal.valueOf(Double.parseDouble(commandOperands[3]));
+                } catch (NumberFormatException e) {
+                    throw new InvalidCommandException("Quantia inválida para transferência!");
+                }
+
+                account.transferir(receiver, value);
+
+                return new Navigation(ScreensList.CLIENT, args);
             default:
                 throw new InvalidCommandException("Comando inválido!");
         }
@@ -95,11 +211,24 @@ public class ClientScreen implements ScreenInterface {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         Message message = new Message("", null);
         Cliente client = ClienteDAO.getClienteById(args[2]);
-        args = StringUtil.removeArgFromList(args, 2);
+
+        int totalPages;
+        int page;
+        try {
+            page = Integer.parseInt(args[3]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            page = 1;
+            args = StringUtil.addArgToList(args, String.valueOf(page));
+        }
 
         while (true) {
+            String screenContent = StringUtil.centralizeBlock(drawAccountsList(client), consoleSize.getColumn());
+            totalPages = (int) Math.ceil((double) screenContent.split("\n").length
+                    / ((double) consoleSize.getRow() - (double) SystemInterfaceUtil.DEFAULT_LINES_PER_PAGE
+                            - (double) HEADER_LINES));
+
             ConsoleUtil.clearScreen();
-            draw(consoleSize, message, client);
+            draw(consoleSize, message, screenContent, client, page, totalPages);
 
             String promptMessage = "Digite o comando que deseja executar: ";
             String userInput = "";
@@ -110,24 +239,28 @@ public class ClientScreen implements ScreenInterface {
                 return new Navigation(ScreensList.EXIT, args);
             } catch (GoBackSignalException e) {
                 ConsoleUtil.clearScreen();
-                return new Navigation(ScreensList.CLIENTS_LIST, args);
+                return new Navigation(ScreensList.CLIENTS_LIST,
+                        StringUtil.removeArgFromList(StringUtil.removeArgFromList(args, 3), 2));
             } catch (NoSuchElementException e) {
                 // do nothing
             }
             System.out.print(ConsoleUtil.Attribute.RESET.getEscapeCode());
 
             try {
-                Navigation commandReturn = executeUserCommand(userInput);
-                if (commandReturn.getScreen() != ScreensList.ACCOUNT) {
+                Navigation commandReturn = executeUserCommand(client, userInput, totalPages, args);
+                if (commandReturn.getScreen() != ScreensList.CLIENT) {
                     ConsoleUtil.clearScreen();
                     return commandReturn;
                 }
+                page = Integer.parseInt(commandReturn.getArg(3));
+                args = StringUtil.removeArgFromList(args, 3);
+                args = StringUtil.addArgToList(args, String.valueOf(page));
 
                 message.setText("Comando executado com sucesso!");
                 message.setType(MessageType.SUCCESS);
                 continue;
             } catch (InvalidCommandException e) {
-                message.setText("Comando inválido!");
+                message.setText(e.getMessage());
                 message.setType(MessageType.ERROR);
                 continue;
             }
