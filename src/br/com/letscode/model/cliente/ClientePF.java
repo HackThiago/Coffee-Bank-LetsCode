@@ -2,6 +2,7 @@ package br.com.letscode.model.cliente;
 
 import java.math.BigDecimal;
 
+import br.com.letscode.error.InvalidCommandException;
 import br.com.letscode.model.conta.Conta;
 import br.com.letscode.model.conta.ContaCorrente;
 import br.com.letscode.model.conta.ContaInvestimento;
@@ -33,7 +34,7 @@ public class ClientePF extends Cliente {
     }
 
     @Override
-    public Conta abrirConta(TipoContaEnum tipo) {
+    public Conta abrirConta(TipoContaEnum tipo) throws InvalidCommandException {
 
         Conta conta = null;
 
@@ -48,7 +49,7 @@ public class ClientePF extends Cliente {
                 conta = new ContaInvestimento(this);
                 break;
             default:
-                throw new Error("Tipo de conta inválido");
+                throw new InvalidCommandException("Tipo de conta inválido");
         }
         // set the conta id to the next sequence value
         this.setId(nextId());

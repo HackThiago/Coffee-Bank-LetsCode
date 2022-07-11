@@ -3,6 +3,7 @@ package br.com.letscode.model.cliente;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import br.com.letscode.error.InvalidCommandException;
 import br.com.letscode.model.conta.Conta;
 import br.com.letscode.model.conta.TipoContaEnum;
 
@@ -55,7 +56,7 @@ public abstract class Cliente {
         return new BigDecimal(1);
     }
 
-    public abstract Conta abrirConta(TipoContaEnum tipo);
+    public abstract Conta abrirConta(TipoContaEnum tipo) throws InvalidCommandException;
 
     public abstract String getDocument();
 
