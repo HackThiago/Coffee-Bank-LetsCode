@@ -1,5 +1,6 @@
 package br.com.letscode;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 import br.com.letscode.database.ClienteDAO;
@@ -11,7 +12,7 @@ import br.com.letscode.util.ConsoleUtil;
 
 public class Aplicacao {
     public static void main(String[] args) throws Exception {
-        ClienteDAO.generateMockDatabase(50);
+        ClienteDAO.generateMockDatabase(50, 5, BigDecimal.valueOf(10000D));
 
         ConsoleUtil.clearScreen();
 

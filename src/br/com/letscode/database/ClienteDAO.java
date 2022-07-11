@@ -1,12 +1,16 @@
 package br.com.letscode.database;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 
 import br.com.letscode.error.ClientNotFoundException;
+import br.com.letscode.error.InvalidCommandException;
 import br.com.letscode.model.cliente.Cliente;
 import br.com.letscode.model.cliente.ClientePF;
 import br.com.letscode.model.cliente.ClientePJ;
+import br.com.letscode.model.conta.Conta;
+import br.com.letscode.model.conta.TipoContaEnum;
 import br.com.letscode.util.ArrayListUtil;
 
 public class ClienteDAO {
@@ -76,9 +80,10 @@ public class ClienteDAO {
         return existCliente(cliente.getDocument());
     }
 
-    public static void generateMockDatabase(int quantity) {
+    public static void generateMockDatabase(int clientsQuantity, int maxAccountsPerClient,
+            BigDecimal maxAccountBalance) {
         Random rand = new Random();
-        for (int i = 0; i < quantity; i++) {
+        for (int i = 0; i < clientsQuantity; i++) {
             Cliente client;
             if (rand.nextInt(2) == 0) {
                 client = new ClientePJ();
@@ -91,6 +96,32 @@ public class ClienteDAO {
             }
             client.setId(Cliente.nextId());
             createCliente(client);
+
+            for (int j = 0; j < maxAccountsPerClient; j++) {
+                TipoContaEnum accountType = null;
+                switch (rand.nextInt(client instanceof ClientePF ? 4 : 3)) {
+                    case 1:
+                        accountType = TipoContaEnum.CORRENTE;
+                        break;
+                    case 2:
+                        accountType = TipoContaEnum.INVESTIMENTO;
+                        break;
+                    case 3:
+                        accountType = TipoContaEnum.POUPANCA;
+                        break;
+                    default:
+                        continue;
+                }
+
+                Conta account = null;
+                try {
+                    account = client.abrirConta(accountType);
+                } catch (InvalidCommandException e) {
+                    // do nothing
+                }
+
+                account.depositar(maxAccountBalance.multiply(BigDecimal.valueOf(rand.nextDouble(1D))));
+            }
         }
     }
 
