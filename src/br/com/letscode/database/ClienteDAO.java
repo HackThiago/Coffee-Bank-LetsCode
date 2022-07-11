@@ -32,6 +32,16 @@ public class ClienteDAO {
                 .findFirst().orElse(null);
     }
 
+    public static Conta getContaById(int id) {
+        for (Cliente cliente : listaCliente) {
+            Conta conta = cliente.getConta(id);
+            if (conta != null) {
+                return conta;
+            }
+        }
+        return null;
+    }
+
     public static ClientePF getClienteByCPF(String cpf) throws ClientNotFoundException {
         for (int i = 0; i < listaCliente.size(); i++) {
             Cliente cliente = listaCliente.get(i);
@@ -126,7 +136,11 @@ public class ClienteDAO {
                     // do nothing
                 }
 
-                account.depositar(maxAccountBalance.multiply(BigDecimal.valueOf(rand.nextDouble())));
+                try {
+                    account.depositar(maxAccountBalance.multiply(BigDecimal.valueOf(rand.nextDouble())));
+                } catch (InvalidCommandException e) {
+                    // do nothing
+                }
             }
         }
     }
