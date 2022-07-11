@@ -11,6 +11,7 @@ import br.com.letscode.util.SystemInterfaceUtil;
 
 public class StartScreen implements ScreenInterface {
     public Navigation run(Scanner scanner, String[] args) {
+        ConsoleUtil.clearScreen();
         ConsoleUtil.scrollScreen();
 
         System.out.print(
