@@ -1,11 +1,14 @@
 package br.com.letscode.util;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import br.com.letscode.error.ExitSignalException;
 import br.com.letscode.error.GoBackSignalException;
 import br.com.letscode.model.ConsolePosition;
 import br.com.letscode.model.Message;
+import br.com.letscode.model.cliente.Cliente;
+import br.com.letscode.model.cliente.ClientePF;
 
 public class SystemInterfaceUtil {
     public static final int DEFAULT_CONSOLE_WIDTH = 108;
@@ -35,6 +38,8 @@ public class SystemInterfaceUtil {
             + "|  _ \\ / _ \\ '_ ` _ \\ ____\\ \\ / / | '_ \\ / _` |/ _ \\   / _` |/ _ \\ " + ConsoleUtil.NEW_LINE
             + "| |_) |  __/ | | | | |_____\\ V /| | | | | (_| | (_) | | (_| | (_) |" + ConsoleUtil.NEW_LINE
             + "|____/ \\___|_| |_| |_|      \\_/ |_|_| |_|\\__,_|\\___/   \\__,_|\\___/ " + ConsoleUtil.NEW_LINE;
+
+    public static final int DEFAULT_LINES_PER_PAGE = 10;
 
     public static String getHeader(String screenName, ConsolePosition pos) {
         final String HEADER_START_TEXT = "Coffee Bank";
@@ -102,6 +107,56 @@ public class SystemInterfaceUtil {
 
         System.out.print(content + ConsoleUtil.NEW_LINE);
         ConsoleUtil.skipLines(3);
+    }
+
+    public static void drawPaginationScreen(String screenName, Message message, String header, String content,
+            ConsolePosition consoleSize, int currentPage, int totalPages) {
+        ConsoleUtil.scrollScreen();
+
+        System.out.print(SystemInterfaceUtil.getHeader(screenName, consoleSize));
+
+        ConsoleUtil.skipLines(1);
+        if (message.getText().length() > 0) {
+            System.out.print(getMessage(message, consoleSize.getColumn()));
+        } else {
+            ConsoleUtil.skipLines(1);
+        }
+
+        ConsoleUtil.skipLines(1);
+
+        System.out.print(header + ConsoleUtil.NEW_LINE);
+        ConsoleUtil.skipLines(2);
+
+        int linesPerPage = (int) Math.ceil((double) content.split("\n").length / (double) totalPages);
+        int startLine = linesPerPage * (currentPage - 1);
+        int endLine = linesPerPage * currentPage;
+        if (endLine > content.split("\n").length) {
+            endLine = content.split("\n").length;
+        }
+        String[] lines = content.split("\n");
+        for (int i = startLine; i < endLine; i++) {
+            System.out.print(lines[i] + ConsoleUtil.NEW_LINE);
+        }
+
+        ConsoleUtil.skipLines(1);
+        System.out.print(StringUtil.centralize("Página " + currentPage + "/" + totalPages + ConsoleUtil.NEW_LINE,
+                consoleSize.getColumn()));
+    }
+
+    public static String getClientsList(ArrayList<Cliente> clientsList, int lineWidth) {
+        String clientsListString = "";
+        for (Cliente cliente : clientsList) {
+            clientsListString += "#"
+                    + cliente.getId()
+                    + " "
+                    + (cliente.getClass() == ClientePF.class
+                            ? StringUtil.formatCPF(cliente.getDocument())
+                            : StringUtil.formatCNPJ(cliente.getDocument()))
+                    + " - "
+                    + cliente.getNome()
+                    + ConsoleUtil.NEW_LINE;
+        }
+        return StringUtil.centralizeBlock(clientsListString, lineWidth);
     }
 
     public static String getUserInput(Scanner scanner, ConsolePosition consoleSize, String message)
