@@ -82,16 +82,22 @@ public class ClienteDAO {
 
     public static void generateMockDatabase(int clientsQuantity, int maxAccountsPerClient,
             BigDecimal maxAccountBalance) {
+        final long minBoundCpf = 10000000000L;
+        final long maxBoundCpf = 99999999999L;
+        final long minBoundCnpj = 10000000000000L;
+        final long maxBoundCnpj = 99999999999999L;
         Random rand = new Random();
         for (int i = 0; i < clientsQuantity; i++) {
             Cliente client;
             if (rand.nextInt(2) == 0) {
                 client = new ClientePJ();
-                client.setDocument(String.valueOf(rand.nextLong(10000000000000L, 99999999999999L)));
+                long generatedCnpj = minBoundCnpj + (long) (Math.random() * (maxBoundCnpj - minBoundCnpj));
+                client.setDocument(String.valueOf(generatedCnpj));
                 client.setNome("Cliente Pessoa Jurídica " + (i + 1));
             } else {
                 client = new ClientePF();
-                client.setDocument(String.valueOf(rand.nextLong(10000000000L, 99999999999L)));
+                long generatedCpf = minBoundCpf + (long) (Math.random() * (maxBoundCpf - minBoundCpf));
+                client.setDocument(String.valueOf(generatedCpf));
                 client.setNome("Cliente Pessoa Física " + (i + 1));
             }
             client.setId(Cliente.nextId());
@@ -120,7 +126,7 @@ public class ClienteDAO {
                     // do nothing
                 }
 
-                account.depositar(maxAccountBalance.multiply(BigDecimal.valueOf(rand.nextDouble(1D))));
+                account.depositar(maxAccountBalance.multiply(BigDecimal.valueOf(rand.nextDouble())));
             }
         }
     }
