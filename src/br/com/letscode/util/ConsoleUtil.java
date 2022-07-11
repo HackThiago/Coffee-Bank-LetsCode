@@ -5,87 +5,135 @@
 
 package br.com.letscode.util;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import br.com.letscode.model.ConsolePosition;
+
 public class ConsoleUtil {
-    static final int DEFAULT_SPEED = 600;
+    static final int DEFAULT_SPEED = 1200;
 
     public static final String ESC = "\033";
+    public static final String NEW_LINE = String.format("%n");
 
-    public enum AttributeEnum {
-        ATTR_RESET(0),
-        ATTR_BRIGHT(1),
-        ATTR_USCORE(4),
-        ATTR_BLINK(5),
-        ATTR_REVERSE(7),
+    public enum Attribute {
+        RESET(0),
+        BRIGHT(1),
+        USCORE(4),
+        BLINK(5),
+        REVERSE(7),
 
-        ATTR_FCOL_BLACK(30),
-        ATTR_FCOL_RED(31),
-        ATTR_FCOL_GREEN(32),
-        ATTR_FCOL_YELLOW(33),
-        ATTR_FCOL_BLUE(34),
+        FCOL_BLACK(30),
+        FCOL_RED(31),
+        FCOL_GREEN(32),
+        FCOL_YELLOW(33),
+        FCOL_BLUE(34),
 
-        ATTR_BCOL_BLACK(40),
-        ATTR_BCOL_RED(41),
-        ATTR_BCOL_GREEN(42),
-        ATTR_BCOL_YELLOW(43),
-        ATTR_BCOL_BLUE(44);
+        BCOL_BLACK(40),
+        BCOL_RED(41),
+        BCOL_GREEN(42),
+        BCOL_YELLOW(43),
+        BCOL_BLUE(44);
 
-        private int value;
+        private String escapeCode;
 
-        private AttributeEnum(int value) {
-            this.value = value;
+        private Attribute(int code) {
+            this.escapeCode = String.format("\033[%dm", code);
         }
 
-        public int getValue() {
-            return this.value;
+        public String getEscapeCode() {
+            return this.escapeCode;
         }
     }
 
-    public static String clearScreen() {
-        return "\033[2J";
+    public static void clearScreen() {
+        System.out.print(Attribute.RESET.getEscapeCode() + "\033[2J");
     }
 
-    public static String cursorHome() {
-        return "\033[H";
+    public static void cursorHome() {
+        System.out.print("\033[H");
     }
 
-    public static String cursorTo(int row, int column) {
-        return String.format("\033[%d;%dH", row, column);
+    public static void cursorTo(int row, int column) {
+        System.out.print(String.format("\033[%d;%dH", row, column));
     }
 
-    public static String cursorSave() {
-        return "\033[s";
+    public static void cursorTo(ConsolePosition pos) {
+        cursorTo(pos.getRow(), pos.getColumn());
     }
 
-    public static String cursorRestore() {
-        return "\033[u";
+    public static void cursorSave() {
+        System.out.print("\033[s");
     }
 
-    public static String scrollScreen() {
-        return "\033[r";
+    public static void cursorRestore() {
+        System.out.print("\033[u");
     }
 
-    public static String scrollSet(int top, int bottom) {
-        return String.format("\033[%d;%dr", top, bottom);
+    public static void cursorRequest() {
+        System.out.print("\u001b[6n");
     }
 
-    public static String scrollUp() {
-        return "\033D";
+    public static void scrollScreen() {
+        System.out.print("\033[r");
     }
 
-    public static String scrollDown() {
-        return "\033D";
-    }
-
-    public static String setAttribute(int attr) {
-        return String.format("\033[%dm", attr);
-    }
-
-    public static String setAttributes(int[] attr) {
-        String attributes = "";
-        for (int i = 0; i < attr.length; i++) {
-            attributes = attributes.concat(setAttribute(attr[i]));
+    public static void skipLines(int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            System.out.print(" " + NEW_LINE);
         }
-        return attributes;
+    }
+
+    public static ConsolePosition getConsoleSize() {
+        cursorSave();
+        cursorTo(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        cursorRequest();
+        cursorRestore();
+
+        ConsolePosition pos = new ConsolePosition();
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            byte[] buff = new byte[1];
+            while (System.in.read(buff, 0, 1) != -1) {
+                sb.append((char) buff[0]);
+                if (buff[0] == 'R') {
+                    break;
+                }
+            }
+
+            Matcher m = Pattern.compile("\\d+").matcher(sb.toString());
+            List<String> regexMatches = new ArrayList<String>();
+
+            for (int i = 0; i < 2; i++) {
+                if (!m.find()) {
+                    throw new IOException("Error when trying to get console size");
+                }
+                regexMatches.add(m.group());
+            }
+
+            pos.setRow(Integer.parseInt(regexMatches.get(0)));
+            pos.setColumn(Integer.parseInt(regexMatches.get(1)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pos;
+    }
+
+    public static void scrollSet(int top, int bottom) {
+        System.out.print(String.format("\033[%d;%dr", top, bottom));
+    }
+
+    public static void scrollUp() {
+        System.out.print("\033D");
+    }
+
+    public static void scrollDown() {
+        System.out.print("\033D");
     }
 
     public static void slowPrint(String s) {
@@ -96,12 +144,13 @@ public class ConsoleUtil {
         for (int i = 0; i < s.length(); i++) {
             System.out.print(s.charAt(i));
 
-            if (bps == 0)
+            if (bps == 0) {
                 continue;
+            }
 
             try {
                 Thread.sleep((int) (8000.0 / bps));
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
