@@ -46,7 +46,7 @@ public abstract class Conta {
     }
 
     public void depositar(BigDecimal quantia) {
-        this.saldo.add(quantia);
+        this.saldo = this.saldo.add(quantia);
     };
 
     public void transferir(Conta destinatario, BigDecimal quantia) {
@@ -56,7 +56,7 @@ public abstract class Conta {
         }
 
         saldo = saldo.subtract(quantia);
-        destinatario.saldo.add(quantia);
+        destinatario.saldo = destinatario.saldo.add(quantia);
 
         this.cobrarTaxaOperacao();
     };
