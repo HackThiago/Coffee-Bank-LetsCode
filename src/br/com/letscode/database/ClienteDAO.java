@@ -28,30 +28,30 @@ public class ClienteDAO {
             .findFirst().orElse(null);
     }
 
-    public ClientePF getClienteByCPF(String cpf){
-        for(int i = 0; i < listaCliente.size(); i++){
+    public static ClientePF getClienteByCPF(String cpf) throws ClientNotFoundException {
+        for (int i = 0; i < listaCliente.size(); i++) {
             Cliente cliente = listaCliente.get(i);
-            if(cliente instanceof ClientePF){
+            if (cliente instanceof ClientePF) {
                 ClientePF clientePf = (ClientePF) cliente;
                 if (clientePf.getCpf().equals(cpf)) {
                     return clientePf;
                 }
             }
-        };
-        throw new Error("Cliente não encontrado");
+        }
+        throw new ClientNotFoundException("Cliente com esse CPF não encontrado");
     }
 
-    public ClientePJ getClienteByCNPJ(String cnpj){
-        for(int i = 0; i < listaCliente.size(); i++){
+    public static ClientePJ getClienteByCNPJ(String cnpj) throws ClientNotFoundException {
+        for (int i = 0; i < listaCliente.size(); i++) {
             Cliente cliente = listaCliente.get(i);
-            if(cliente instanceof ClientePJ){
+            if (cliente instanceof ClientePJ) {
                 ClientePJ clientePj = (ClientePJ) cliente;
                 if (clientePj.getCnpj().equals(cnpj)) {
                     return clientePj;
                 }
             }
-        };
-        throw new Error("Cliente não encontrado");
+        }
+        throw new ClientNotFoundException("Cliente com este CNPJ não encontrado");
     }
 
     public static ArrayList<Cliente> getClientesByNome(String nome){
