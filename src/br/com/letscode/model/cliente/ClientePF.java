@@ -51,8 +51,7 @@ public class ClientePF extends Cliente {
             default:
                 throw new InvalidCommandException("Tipo de conta inválido");
         }
-        // set the conta id to the next sequence value
-        this.setId(nextId());
+        
         // add conta to arraylist of contas
         this.addConta(conta);
 
