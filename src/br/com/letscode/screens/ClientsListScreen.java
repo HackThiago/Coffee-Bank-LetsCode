@@ -41,13 +41,13 @@ public class ClientsListScreen implements ScreenInterface {
         int page = Integer.parseInt(args[2]);
         args = StringUtil.removeArgFromList(args, 2);
 
-        if (userCommand.equals("\\n")) {
+        if (userCommand.toLowerCase().equals("\\n")) {
             if (page >= totalPages) {
                 throw new InvalidCommandException("Não há mais páginas");
             }
             return new Navigation(ScreensList.CLIENTS_LIST, StringUtil.addArgToList(args, String.valueOf(page + 1)));
         }
-        if (userCommand.equals("\\p")) {
+        if (userCommand.toLowerCase().equals("\\p")) {
             if (page <= 1) {
                 throw new InvalidCommandException("Não há mais páginas");
             }
