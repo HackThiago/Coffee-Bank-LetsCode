@@ -212,7 +212,7 @@ public class ClientScreen implements ScreenInterface {
     public Navigation run(Scanner scanner, String[] args) {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         Message message = new Message("", null);
-        Cliente client = ClienteDAO.getClienteById(args[2]);
+        Cliente client = ClienteDAO.getClienteById(Integer.parseInt(args[2]));
 
         int totalPages;
         int page;

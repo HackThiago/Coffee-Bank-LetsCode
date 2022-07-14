@@ -8,18 +8,19 @@ import br.com.letscode.model.conta.Conta;
 import br.com.letscode.model.conta.TipoContaEnum;
 
 public abstract class Cliente {
-    private String id = "";
+    private int id;
     private static int idSequence = 1;
     private String nome;
     private ArrayList<Conta> contas = new ArrayList<Conta>();
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
     public void setId(int id) {
-        if (this.id.length() == 0) {
-            this.id = String.valueOf(id);
+        // can only be set once
+        if (this.id == 0) {
+            this.id = id;
         }
     }
 

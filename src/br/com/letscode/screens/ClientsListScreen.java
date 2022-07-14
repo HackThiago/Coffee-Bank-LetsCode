@@ -76,7 +76,7 @@ public class ClientsListScreen implements ScreenInterface {
         }
 
         if (cliente != null) {
-            return new Navigation(ScreensList.CLIENT, StringUtil.addArgToList(args, cliente.getId()));
+            return new Navigation(ScreensList.CLIENT, StringUtil.addArgToList(args, Integer.toString(cliente.getId())));
         }
 
         throw new InvalidCommandException("Comando inválido!");
