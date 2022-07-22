@@ -51,6 +51,14 @@ public class ConsoleUtil {
 
     public static void clearScreen() {
         System.out.print(Attribute.RESET.getEscapeCode() + "\033[2J");
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")){
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch(Exception e) {}
     }
 
     public static void cursorHome() {

@@ -168,11 +168,12 @@ public class SystemInterfaceUtil {
         ConsoleUtil.cursorTo(consoleSize.getRow(), message.length() + 1);
 
         String userInput = scanner.nextLine();
+        String userInputUpper = userInput.strip().toUpperCase();
 
-        if (userInput.strip().toUpperCase().equals("\\EXIT")) {
+        if (userInputUpper.equals("\\EXIT")) {
             throw new ExitSignalException("The user has sent the exit signal");
         }
-        if (userInput.strip().toUpperCase().equals("\\BACK")) {
+        if (userInputUpper.equals("\\BACK") || userInputUpper.equals("\\B")) {
             throw new GoBackSignalException("The user has sent the go back signal");
         }
 
