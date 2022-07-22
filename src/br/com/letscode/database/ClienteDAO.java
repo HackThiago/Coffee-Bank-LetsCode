@@ -27,7 +27,7 @@ public class ClienteDAO {
         listaCliente.add(newCliente);
     }
 
-    public static Cliente getClienteById(String id) {
+    public static Cliente getClienteById(int id) {
         return listaCliente.stream().filter(cliente -> cliente.getId() == id)
                 .findFirst().orElse(null);
     }

@@ -22,7 +22,7 @@ import br.com.letscode.util.StringUtil;
 import br.com.letscode.util.SystemInterfaceUtil;
 
 public class ClientScreen implements ScreenInterface {
-    private static final int HEADER_LINES = 8;
+    private static final int HEADER_LINES = 10;
 
     private static String drawAccountsList(Cliente client) {
         String accountsList = "";
@@ -67,7 +67,9 @@ public class ClientScreen implements ScreenInterface {
                         + ConsoleUtil.NEW_LINE
                         + "INVESTIR {CÓDIGO CONTA} {QUANTIA}"
                         + ConsoleUtil.NEW_LINE
-                        + "TRANSFERIR {CÓDIGO CONTA ORIGEM} {CÓDIGO CONTA DESTINO} {QUANTIA}", consoleSize.getColumn());
+                        + "TRANSFERIR {CÓDIGO CONTA ORIGEM} {CÓDIGO CONTA DESTINO} {QUANTIA}", consoleSize.getColumn())
+                + ConsoleUtil.NEW_LINE
+                + StringUtil.centralize("Digite \\n ou \\p para navegar entre as páginas", consoleSize.getColumn());
 
         SystemInterfaceUtil.drawPaginationScreen(SCREEN_NAME, message, SCREEN_HEADER, screenContent, consoleSize,
                 currentPage, totalPages);
@@ -77,14 +79,14 @@ public class ClientScreen implements ScreenInterface {
             throws InvalidCommandException {
         int page = Integer.parseInt(args[3]);
 
-        if (userCommand.equals("\\n")) {
+        if (userCommand.toLowerCase().equals("\\n")) {
             if (page >= totalPages) {
                 throw new InvalidCommandException("Não há mais páginas");
             }
             args = StringUtil.removeArgFromList(args, 3);
             return new Navigation(ScreensList.CLIENT, StringUtil.addArgToList(args, String.valueOf(page + 1)));
         }
-        if (userCommand.equals("\\p")) {
+        if (userCommand.toLowerCase().equals("\\p")) {
             if (page <= 1) {
                 throw new InvalidCommandException("Não há mais páginas");
             }
@@ -98,7 +100,7 @@ public class ClientScreen implements ScreenInterface {
         BigDecimal value;
         switch (commandOperands[0].toUpperCase()) {
             case "ABRIR":
-                if (commandOperands.length != 3 || !commandOperands[1].matches("CONTA")) {
+                if (commandOperands.length != 3 || !commandOperands[1].toUpperCase().matches("CONTA")) {
                     throw new InvalidCommandException("Comando inválido!");
                 }
 
@@ -210,7 +212,7 @@ public class ClientScreen implements ScreenInterface {
     public Navigation run(Scanner scanner, String[] args) {
         ConsolePosition consoleSize = new ConsolePosition(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         Message message = new Message("", null);
-        Cliente client = ClienteDAO.getClienteById(args[2]);
+        Cliente client = ClienteDAO.getClienteById(Integer.parseInt(args[2]));
 
         int totalPages;
         int page;

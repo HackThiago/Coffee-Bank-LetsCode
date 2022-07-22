@@ -178,7 +178,7 @@ public class CreateClientScreen implements ScreenInterface {
 
         ConsoleUtil.clearScreen();
         navigate.setScreen(ScreensList.CLIENT);
-        navigate.setArgs(StringUtil.addArgToList(args, client.getId()));
+        navigate.setArgs(StringUtil.addArgToList(args, Integer.toString(client.getId())));
         return navigate;
     }
 

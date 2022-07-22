@@ -25,7 +25,7 @@ public class StartScreen implements ScreenInterface {
 
         System.out.print(StringUtil.centralize("Tecle ENTER para continuar", SystemInterfaceUtil.DEFAULT_CONSOLE_WIDTH)
                 + ConsoleUtil.NEW_LINE
-                + StringUtil.centralize("Digite \"\\back\" nas telas para retornar a tela anterior",
+                + StringUtil.centralize("Digite \"\\b\" ou \"\\back\" nas telas para retornar a tela anterior",
                         SystemInterfaceUtil.DEFAULT_CONSOLE_WIDTH)
                 + ConsoleUtil.NEW_LINE
                 + StringUtil.centralize("Digite \"\\exit\" nas telas para encerrar o programa",
